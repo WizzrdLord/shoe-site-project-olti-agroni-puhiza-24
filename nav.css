@@ -50,7 +50,7 @@ main{
 
 .navbar .logo img{
     filter: brightness(0%) invert(1);
-    max-width: 6rem;
+    max-width: 4rem;
     margin: 0 2rem 0 0;
     display: none;
 }
