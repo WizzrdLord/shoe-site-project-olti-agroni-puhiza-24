@@ -1,0 +1,169 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    box-sizing: border-box;
+}
+:root{
+    font-size: 16px;
+    font-family: 'Open Sans';
+    --text-primary:rgb(0, 0, 0);
+    --text-secondary:rgb(255, 255, 255);
+    --bg-primary:rgb(255, 255, 255);
+    --bg-secondary:rgb(255, 0, 0);
+    --transition-speed: 600ms;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body{
+    color: black;
+    background-color: white;
+}
+
+body::-webkit-scrollbar{
+   width: 0.25rem; 
+}
+
+body::-webkit-scrollbar-track{
+    background: rgba(0, 0, 0, 0.05); 
+}
+
+body::-webkit-scrollbar-thumb{
+    background: #800020;
+}
+
+main{
+    margin-left: 5rem;
+    padding: 1rem;
+}
+
+/*Main Nav Look Start*/
+.navbar{
+    position: fixed;
+    background-color: var(--bg-secondary);
+    transition: width 200ms ease;
+}
+
+.navbar .logo img{
+    filter: brightness(0%) invert(1);
+    max-width: 6rem;
+    margin: 0 2rem 0 0;
+    display: none;
+}
+
+.navbar:hover .logo img{
+    display: block;
+}
+.logo svg{
+    transform: rotate(0deg);
+    transition: transform var(--transition-speed);
+}
+
+.navbar:hover .logo svg{
+    transform: rotate(-180deg);
+}
+
+.navbar-nav{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-item{
+    margin-top: auto;
+    width: 100%;
+}
+
+.nav-item:hover{
+    filter: brightness(0.9);
+}
+
+.nav-link{
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+}
+
+.link-text:first-child{
+    display: none;
+    margin-left: 1rem;
+}
+
+.link-text:not(:first-child){
+    animation: fadeIn 400ms;
+    display: none;
+    margin-left: 1rem;
+}
+@keyframes fadeIn{
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
+.nav-link svg{
+    filter: brightness(0%) invert(1);
+    min-width: 2rem;
+    max-width: 2rem;
+    margin: 0 1.5rem;
+}
+/*Main Nav Look End*/
+
+/*Gallery Dropdown Start*/
+
+/*Gallery Dropdown End*/
+
+/*Small Screen*/
+@media only screen and (max-width:800px){
+    .navbar{
+        bottom: 0;
+        width: 100vw;
+        height: 5rem;
+        z-index: 100;
+    }
+
+    .logo{
+        display: none;
+    }
+    
+    .navbar-nav{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .nav-link{
+        justify-content: center;
+    }
+    main{
+        margin: 0;
+    }
+}
+/*Large Screen*/
+@media only screen and (min-width: 800px){
+   .navbar{
+    top: 0;
+    width: 5rem;
+    height: 100vh
+    }
+   
+   .navbar:hover{
+    width: 16rem;
+    z-index: 100;
+    }
+
+    .navbar:hover .link-text{
+        display: block;
+        transition: opacity var(--transition-speed);
+    }
+}
