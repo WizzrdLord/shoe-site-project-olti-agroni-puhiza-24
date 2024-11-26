@@ -110,14 +110,6 @@ section{
     user-select: none;
 }
 
-.unselectable.arrow-left{
-
-}
-
-.unselectable.arrow-rightP{
-
-}
-
 .landing #prev,
 .landing #next{
     position: absolute;
