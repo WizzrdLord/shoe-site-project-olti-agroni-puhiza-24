@@ -60,20 +60,18 @@ section{
     }
 }
 
-.landing .new-container .slide .content span{
-    padding-left: 2.5rem;
-    font-size: 2rem;
-    color:rgb(128, 0, 32);
+.landing .new-container .slide .content h3{
+    font-size: 3rem;
+    color:var(--text-primary);
 }
 
-.landing .new-container .slide .content h3{
-    font-size: 5rem;
-    color: #000000;
-
+.landing .new-container .slide .content span{
+    font-size: 2.25rem;
+    color:var(--bg-secondary);
 }
 
 .landing .new-container .slide .content p{
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: #666;
     padding: .5rem 0;
 }
@@ -82,20 +80,17 @@ section{
     display: inline-block;
     margin-top: 1rem;
     border-radius: .2rem;
-    border: .2rem solid #000000;
-    font-weight: bolder;
-    font-size: 1.7rem;
-    color: #000000;
-    cursor: pointer;
-    background: #fff;
-    padding: .8rem 3rem;
-}
-
-.btn:hover{
+    font-weight: bold;
     font-size: 1.8rem;
     color: var(--text-secondary);
     background: var(--bg-secondary);
-    padding: .7rem 2.85rem;
+    padding: .8rem 3rem;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background: #9B0027;
+    font-weight: bolder;
 }
 
 .landing .new-container{
@@ -113,36 +108,47 @@ section{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    
 }
 
-.landing #prev,.landing #next{
+.unselectable.arrow-left{
+
+}
+
+.unselectable.arrow-rightP{
+
+}
+
+.landing #prev,
+.landing #next{
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 50;
-    height: 5rem;
-    width: 5rem;
-    line-height: 4.5rem;
-    font-size: 2.5rem;
-    color: #000000;
-    border: .2rem solid #000000;
-    border-radius: 50%;
-    text-align: center;
+    height: 2.5rem;
+    width: 2.5rem;
+    line-height: 2.5rem;
+    font-size: 1.5rem;
+    color: var(--bg-secondary);
     cursor: pointer;
-}
-
-.landing #prev:hover,.landing #next:hover{
-    color: #fff;
-    background-color: rgb(128, 0, 32);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .landing #prev{
     left: 2rem;
+    transform: translateY(-50%, -50%);
 }
 
 .landing #next{
     right: 2rem;
+    transform: translateY(-50%, -50%);
+}
+
+.landing #prev:hover,
+.landing #next:hover{
+    color: #9B0027;
+    scale: 1.2;
 }
 /*Landing CSS End*/
 
