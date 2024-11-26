@@ -85,12 +85,14 @@ main{
     filter: brightness(0.9);
 }
 
-.nav-item-bottom{
+.nav-item-user{
+    position: absolute;
     margin-top: auto;
     width: 100%;
+    bottom: 0;
 }
 
-.nav-item-bottom:hover{
+.nav-item-user:hover{
     filter: brightness(0.9);
 }
 
