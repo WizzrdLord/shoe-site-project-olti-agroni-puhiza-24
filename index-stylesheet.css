@@ -145,3 +145,11 @@ section{
     right: 2rem;
 }
 /*Landing CSS End*/
+
+footer{
+    clear: both;
+    border-top: #000000 solid 0.1rem;
+    color: #000000;
+    text-align: center;
+    padding: 10px;
+}
