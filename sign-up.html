@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hat Shoes Store</title>
     <link rel="stylesheet" href="nav.css">
+    <link rel="stylesheet" href="sign-up.css">
 </head>
 <body>
     <nav class="navbar">  
@@ -54,5 +55,33 @@
             </li>
         </ul>
     </nav>
+
+   <div class="sign-up-container">
+    <h1>Create an account</h1>
+    <p>Enter your details below</p>
+    <form class="form-inputs">
+        <div>
+            <input type="text" name="firstname" id="firstname-input" placeholder="First Name" required>
+        </div>
+
+        <div>
+            <input type="text" name="lastname" id="lastname-input" placeholder="Last Name" required>
+        </div>
+
+        <div>
+            <input type="email" name="email" id="email-input" placeholder="Email" required>
+        </div>
+
+        <div>
+            <input type="password" name="password" id="password-input" placeholder="Password" required>
+        </div>
+         <button type="submit">Create Account</button>
+    </form>
+
+   
+    <div class="login">
+    <p>Already have an account? <a href="log-in.html">Log in</a></p>
+     </div>
+   </div>
 </body>
 </html>
