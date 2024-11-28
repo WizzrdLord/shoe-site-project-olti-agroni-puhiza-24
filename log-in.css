@@ -43,7 +43,7 @@ button {
     width: 371px;
     margin-top: 20px;
     background-color:rgb(128, 0, 32) ;
-    font-size: 15px;
+    font-size: 20px;
     cursor: pointer;
 }
 button:hover {
