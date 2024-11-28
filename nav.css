@@ -137,7 +137,7 @@ main{
 /*Gallery Dropdown End*/
 
 /*Small Screen*/
-@media only screen and (max-width:800px){
+@media only screen and (max-width:768px){
     .navbar{
         bottom: 0;
         width: 100vw;
@@ -162,7 +162,7 @@ main{
     }
 }
 /*Large Screen*/
-@media only screen and (min-width: 800px){
+@media only screen and (min-width: 768px){
    .navbar{
     top: 0;
     width: 5rem;
