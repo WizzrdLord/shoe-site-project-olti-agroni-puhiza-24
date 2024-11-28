@@ -3,11 +3,7 @@
     padding: 0;
 }
 
-body {
-    align-items: center;
-}
-
-.sign-up-container {
+.log-in-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,29 +12,10 @@ body {
     margin-top: 10%;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
+    
 }
 
-
-
-#firstname-input{
-    outline: none;
-    border: none;
-    height: 32px;
-    width: 370px;
-    border-bottom: 2px solid rgb(165, 163, 163);
-    margin-bottom: 15px;
-}
-
-#lastname-input{
-    outline: none;
-    border: none;
-    height: 32px;
-    width: 370px;
-    border-bottom: 2px solid rgb(165, 163, 163);
-    margin-bottom: 15px;
-}
-
-#email-input {
+#username-input {
     outline: none;
     border: none;
     height: 32px;
