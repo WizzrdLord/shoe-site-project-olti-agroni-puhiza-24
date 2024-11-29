@@ -15,7 +15,7 @@
     
 }
 
-#username-input {
+#email-input {
     outline: none;
     border: none;
     height: 32px;
@@ -31,6 +31,10 @@
     width: 370px;
     border-bottom: 2px solid rgb(165, 163, 163);
     margin-bottom: 15px;
+}
+
+#error-message{
+    color: red;
 }
 
 button {

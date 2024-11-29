@@ -6,7 +6,7 @@ const password_input = document.getElementById('password-input')
 const error_mesage = document.getElementById('error-message')
 
 form.addEventListener ('submit', (e) => {
-    // e.preventDefault()
+    //  e.preventDefault();
 
     let errors = []
 
@@ -71,11 +71,12 @@ function getSignupFormErrors(firstname, lastname, email, password){
 
 const allInputs = [firstname_input, lastname_input, email_input, password_input]
 
-allInputs.forEach(input => {
-    input.addEventListener('input', () => {
-        if(input.parentElement.classList.contains('incorrect')){
-            input.parentElement.classList.remove('incorrect')
-            error_mesage.innerText = ''
-        }
-    })
-})
+ allInputs.forEach(input => {
+     input.addEventListener('input', () => {
+         if(input.parentElement.classList.contains('incorrect')){
+             input.parentElement.classList.remove('incorrect')
+             error_mesage.innerText = ''
+         }
+     })
+ })
+
