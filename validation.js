@@ -53,21 +53,21 @@ function getSignupFormErrors(firstname, lastname, email, password){
     return errors;
 }
 
-// function getLoginFormErrors(email, password){
-//     let errors = []
+ function getLoginFormErrors(email, password){
+     let errors = []
 
-//     if( email === '' || email == null){
-//         errors.push('Email is required')
-//         email_input.parentElement.classList.add('incorrect')
-//     }
+   if( email === '' || email == null){
+         errors.push('Email is required')
+         email_input.parentElement.classList.add('incorrect')
+     }
 
-//     if( password === '' || password == null){
-//         errors.push('Password is required')
-//         password_input.parentElement.classList.add('incorrect')
-//     }
+     if( password === '' || password == null){
+         errors.push('Password is required')
+         password_input.parentElement.classList.add('incorrect')
+     }
 
-//     return errors;
-// }
+     return errors;
+ }
 
 const allInputs = [firstname_input, lastname_input, email_input, password_input]
 
