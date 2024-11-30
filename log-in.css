@@ -1,8 +1,3 @@
-*{
-    margin: 0;
-    padding: 0;
-}
-
 .log-in-container {
     display: flex;
     justify-content: center;
@@ -12,7 +7,6 @@
     margin-top: 10%;
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
-    
 }
 
 #email-input {
@@ -54,10 +48,10 @@ button:hover {
     background-color: rgb(109, 1, 28) ;
 }
 
-a{
+.sign{
     color: black;
 }
 
-a:hover {
+.sign:hover {
     text-decoration: underline;
 }
