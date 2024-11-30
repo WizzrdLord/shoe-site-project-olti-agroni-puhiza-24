@@ -3,7 +3,7 @@ const firstname_input = document.getElementById('firstname-input')
 const lastname_input = document.getElementById('lastname-input')
 const email_input = document.getElementById('email-input')
 const password_input = document.getElementById('password-input')
-const error_mesage = document.getElementById('error-message')
+const error_message = document.getElementById('error-message')
 
 form.addEventListener ('submit', (e) => {
 
@@ -18,7 +18,7 @@ form.addEventListener ('submit', (e) => {
 
     if(errors.length > 0){
         e.preventDefault()
-        error_mesage.innerText = errors.join(". ")
+        error_message.innerText = errors.join(". ")
     }
 })
 
@@ -74,7 +74,7 @@ const allInputs = [firstname_input, lastname_input, email_input, password_input]
      input.addEventListener('input', () => {
          if(input.parentElement.classList.contains('incorrect')){
              input.parentElement.classList.remove('incorrect')
-             error_mesage.innerText = ''
+             error_message.innerText = ''
          }
      })
  })

@@ -8,7 +8,7 @@
 
 :root{
     font-size: 16px;
-    font-family: 'Open Sans';
+    font-family: 'Open Sans' !important;
     --text-primary:rgb(0, 0, 0);
     --text-secondary:rgb(255, 255, 255);
     --bg-primary:rgb(255, 255, 255);
@@ -86,13 +86,6 @@ main{
     filter: brightness(0.9);
 }
 
-.nav-item-user{
-    position: absolute;
-    margin-top: auto;
-    width: 100%;
-    bottom: 0;
-}
-
 .nav-item-user:hover{
     filter: brightness(0.9);
 }
@@ -154,6 +147,12 @@ main{
         flex-direction: row;
     }
 
+    .nav-item .user{
+        position: absolute;
+        margin-top: auto;
+        width: 100%;
+    }
+
     .nav-link{
         justify-content: center;
     }
@@ -172,6 +171,13 @@ main{
    .navbar:hover{
     width: 16rem;
     z-index: 100;
+    }
+
+    .nav-item-user{
+        position: absolute;
+        margin-top: auto;
+        width: 100%;
+        bottom: 0;
     }
 
     .navbar:hover .link-text{
