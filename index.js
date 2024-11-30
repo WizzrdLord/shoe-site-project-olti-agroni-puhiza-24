@@ -13,3 +13,15 @@ function prev(){
     l_index = (l_index - 1 + slides.length) % slides.length;
     slides[l_index].classList.add('active')
 }
+
+const imageContainers = document.querySelectorAll('.image-container');
+imageContainers.forEach(imageContainer =>{
+    const featuredImages = imageContainer.querySelectorAll('.featured-image');
+    const largeImage = imageContainer.querySelector('.large-image');
+
+    featuredImages.forEach(featuredImage =>{
+        featuredImage.addEventListener('click', () =>{
+        largeImage.src = featuredImage.src
+        });
+    });
+});

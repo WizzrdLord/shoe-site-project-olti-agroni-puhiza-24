@@ -6,6 +6,7 @@
     <title>Hat Shoes Store</title>
     <link rel="stylesheet" href="nav.css">
     <link rel="stylesheet" href="sign-up.css">
+    <script src="validation.js" defer></script>
 </head>
 <body>
     <nav class="navbar">  
@@ -21,7 +22,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#gallery" class="nav-link">
+                <a href="index.html" class="nav-link">
                     <svg class="gallery-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
                         <path class="st0" d="M511.529,337.45H7.928c7.129,26.637,16.478,44.576,16.478,44.576h147.537v-24.6l50.715,24.6h285.854C511.788,364.888,512.661,350.196,511.529,337.45z"/>
@@ -32,7 +33,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="abt.html" class="nav-link">
                     <svg viewBox="0 0 512 512" version="1.1">
                         <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <g id="drop" fill="#000000" transform="translate(42.666667, 42.666667)">
@@ -56,27 +57,39 @@
                     <span class="link-text">Blog</span>
                 </a>
             </li>
+
+            <li class="nav-item-user">
+                <a href="sign-up.html" class="nav-link">
+                    <svg width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 7C9.65685 7 11 5.65685 11 4C11 2.34315 9.65685 1 8 1C6.34315 1 5 2.34315 5 4C5 5.65685 6.34315 7 8 7Z" fill="#000000"/>
+                        <path d="M14 12C14 10.3431 12.6569 9 11 9H5C3.34315 9 2 10.3431 2 12V15H14V12Z" fill="#000000"/>
+                    </svg>
+                    <span class="link-text">Account</span>
+                </a>
+            </li>
+            
         </ul>
     </nav>
 
    <div class="sign-up-container">
     <h1>Create an account</h1>
     <p>Enter your details below</p>
-    <form class="form-inputs">
+    <p id="error-message"></p>
+    <form id="form">
         <div>
-            <input type="text" name="firstname" id="firstname-input" placeholder="First Name" required>
+            <input type="text" name="firstname" id="firstname-input" placeholder="First Name" >
         </div>
 
         <div>
-            <input type="text" name="lastname" id="lastname-input" placeholder="Last Name" required>
+            <input type="text" name="lastname" id="lastname-input" placeholder="Last Name" >
         </div>
 
         <div>
-            <input type="email" name="email" id="email-input" placeholder="Email" required>
+            <input type="email" name="email" id="email-input" placeholder="Email" >
         </div>
 
         <div>
-            <input type="password" name="password" id="password-input" placeholder="Password" required>
+            <input type="password" name="password" id="password-input" placeholder="Password" >
         </div>
          <button type="submit">Create Account</button>
     </form>
