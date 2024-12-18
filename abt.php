@@ -1,5 +1,5 @@
 <!--
-Webfaqja të ketë minimum 3 pages si p.sh: 
+Uebfaqja të ketë minimum 3 pages si p.sh: 
 Faqen kryesore(Home/Dashboard), About us, Products, News, Contact us, 
 Page qe përmban (detajet e produktit, lajmit, ofertes, etj.)
 Përdorimi i JavaScript për validim të kontakt formës dhe Login/Register
