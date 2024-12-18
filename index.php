@@ -14,10 +14,8 @@ Perdorimi i GIT.-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hat Shoes Store</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
     <link rel="stylesheet" href="font-awesome\css\font-awesome.min.css">
     <link rel="stylesheet" href="css/index-stylesheet.css">
-    <link rel="stylesheet" href="css/nav.css">
 </head>
 <body>
     
