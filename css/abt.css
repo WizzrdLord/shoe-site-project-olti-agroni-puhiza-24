@@ -1,10 +1,9 @@
-main{
-    font-family: Georgia, 'Times New Roman', Times, serif;
+main {
+    font-family: 'Open Sans', sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    font-family: 'Open Sans', sans-serif;
     margin: 0;
     background-image: url('images/offices.png'); 
     background-size: cover; 

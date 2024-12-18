@@ -38,7 +38,7 @@
 
    
     <div class="login">
-    <p>Already have an account? <a class="log" href="log-in.html">Log in</a></p>
+    <p>Already have an account? <a class="log" href="log-in.php">Log in</a></p>
      </div>
    </div>
 </body>

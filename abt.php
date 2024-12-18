@@ -25,9 +25,9 @@ Perdorimi i GIT.
 </head>
 <body>
     
-    <?php require "navbar.php"; ?>    
+    <?php require "navbar.php";?>   
 
-    <main>
+    <main style="background-image: url('images/offices.png'); ">
         <div class="center-container">
             <div class="card">
                 <h2 class="card-header">Sales</h2>
