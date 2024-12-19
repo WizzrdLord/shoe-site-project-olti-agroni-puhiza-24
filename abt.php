@@ -29,17 +29,17 @@ Perdorimi i GIT.
         <div class="center-container">
             <div class="card">
                 <h2 class="card-header">Sales</h2>
-                <p class="card-text">Interested in ordering in mass, changing your order or canceling an order before shipment? You can contact our hard-working staff that will be able to help you each step of the way!</p>
+                <p class="card-text">Interested in ordering in mass, changing your order or canceling an order before shipment? You can contact our hard-working staff that will be able to help you each step of the way! <br><br> Head of Sales: Jim Halpert</p>
                 <button class="card-button">Contact Sales</button>
             </div>
             <div class="card">
                 <h2 class="card-header">Support</h2>
-                <p class="card-text">Do you have any questions or problems with your order? Contact our around-the-clock responsive staff that will take all your suggestions and complaints and take them to appropriate departments!</p>
+                <p class="card-text">Do you have any questions or problems with your order? Contact our around-the-clock responsive staff that will take all your suggestions and complaints and take them to appropriate departments! <br><br> Head of Support: Phillys Lapin</p>
                 <button class="card-button">Contact Support</button>
             </div>
             <div class="card">
                 <h2 class="card-header">Legal</h2>
-                <p class="card-text">For any legal manners that you might be interested into contacting us in, please use this button to contact our legal team, working hours are 10:00-19:00 EST.</p>
+                <p class="card-text">For any legal manners that you might be interested into contacting us in, please use this button to contact our legal team, working hours are 10:00-19:00 EST. <br><br> Head of HR and Legal: Toby Flenderson </p>
                 <button class="card-button">Contact Legal</button>
             </div>
         </div>

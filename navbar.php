@@ -45,7 +45,7 @@
                         <circle cx="97.5" cy="231" r="12.5"></circle>
                         <path d="M484.5 73.5h-457A27.54 27.54 0 0 0 0 101v22.5h512V101a27.54 27.54 0 0 0-27.5-27.5Zm-50 32.5h-10a7.5 7.5 0 0 1 0-15h10a7.5 7.5 0 0 1 0 15Zm40 0h-10a7.5 7.5 0 0 1 0-15h10a7.5 7.5 0 0 1 0 15Z"></path>
                     </svg>
-                    <span class="link-text">Blog</span>
+                    <span class="link-text">News</span>
                 </a>
             </li>
 
