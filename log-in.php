@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="css/log-in.css">
     <script src="js/validation.js" defer></script>
 </head>
+<?php
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "shoe-store";
+
+    $conn = new mysqli($servername,$username,$password,$database);
+    if($conn->connect_error){
+        die("Lidhja dështoi: ".$conn->connect_error);
+    }
+    $sql = "SELECT * FROM `accounts` ORDER BY account_id DESC";
+    $result = $conn->query($sql);
+?>
 <body>
     
     <?php require "navbar.php"; ?>
