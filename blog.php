@@ -10,7 +10,7 @@
     }
     $sql = "SELECT * FROM `blogs-table` ORDER BY blog_creation_date DESC";
     $result = $conn->query($sql);
-?>
+?> 
 
 <!DOCTYPE html>
 <html lang="en">
