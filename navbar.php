@@ -1,7 +1,7 @@
 <!--navbar php-->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
 <link rel="stylesheet" href="css/nav.css">
-
+<link rel="icon" type="image/png" href="images\logo_new.png">
 <nav class="navbar">  
         <ul class="navbar-nav">
             <li class="logo">

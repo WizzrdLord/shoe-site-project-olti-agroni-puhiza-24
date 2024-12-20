@@ -6,6 +6,7 @@
     <title>Hat Shoes Store</title>
     <link rel="stylesheet" href="css/log-in.css">
     <script src="js/validation.js" defer></script>
+    <link rel="icon" type="image/png" href="images\logo_new.png">
 </head>
 
 <body>
