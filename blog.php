@@ -20,6 +20,7 @@
     <title>Hat Shoes Blog</title>
     <link rel="stylesheet" href="font-awesome\css\font-awesome.min.css">
     <link rel="stylesheet" href="css/blog.css">
+    <link rel="icon" type="image/png" href="images\logo_new.png">
 </head>
 <body>
     <?php require "navbar.php"; ?>

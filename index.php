@@ -16,6 +16,7 @@ Perdorimi i GIT.-->
     <title>Hat Shoes Store</title>
     <link rel="stylesheet" href="font-awesome\css\font-awesome.min.css">
     <link rel="stylesheet" href="css/index-stylesheet.css">
+    <link rel="icon" type="image/png" href="images\logo_new.png">
 </head>
 <body>
     
