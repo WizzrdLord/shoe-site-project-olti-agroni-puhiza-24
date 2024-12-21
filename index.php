@@ -285,6 +285,6 @@ Perdorimi i GIT.-->
     <footer>
         <p>&copy; 2024 Hat Shoes Store. All rights reserved.</p>
     </footer>
-    <script src="index.js"></script>
+    <script src="./js/index.js"></script>
 </body>
 </html>
