@@ -48,23 +48,31 @@
         }
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $email = $_POST['email'];
-            $password = $_POST['password'];
+            $email = $_POST['account_address'] ?? null;
+            $password = $_POST['account_password'] ?? null;
 
             $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE account_address = ?");
+            if (!$stmt){
+                die("Prepare failed: " . $conn->error);
+            }
             $stmt->bind_param("s", $email);
             $stmt->execute();
             $stmt->bind_result($hashed_password);
-            $stmt->fetch();
+            // $stmt->fetch();
 
-            if (password_verify($password, $hashed_password)){
-                echo "Login successfull!";
-            } else {
-                echo "Invalid email or password";
-            }
-
-            $stmt->close();
+                if ($stmt->fetch()) {
+                    if (password_verify($password, $hashed_password)) {
+                        echo "Log in successful!";
+                    } else {
+                        echo "Invalid email or password";
+                    }
+                } else {
+                    echo "No account found with this email";
+                }
+           $stmt->close();
         }
+
+        $conn->close();
     ?>
 </body>
 </html>
