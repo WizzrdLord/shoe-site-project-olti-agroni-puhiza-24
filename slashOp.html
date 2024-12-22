@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/slashOp.css">
+    <link rel="icon" type="image/png" href="images\logo_new.png">
+    <title>/op panel</title>
+</head>
+<body>
+    <header>
+        <img src="images\admin_logo.png" class="slashOpLogo">
+        <p class="headerText">/op paneli - ⚠️</p>
+    </header>
+    <main>
+        <div class="sidebar">
+            <button id="SHOES_BUTTON" class="tab"><img class="tab_img" src="images/n_shoe.svg"><p class="tab_text">Këpucët</p></button>
+            <button id="BLOGS_BUTTON" class="tab"><img class="tab_img" src="images/n_blog.svg"><p class="tab_text">Blogjet</p></button>
+            <button id="ACCOUNTS_BUTTON" class="tab"><img class="tab_img" src="images/n_about.svg"><p class="tab_text">Llogaritë</p></button>
+            <button id="ISSUES_BUTTON" class="tab"><img class="tab_img" src="images/admin_logo_black.png"><p class="tab_text">Raporto Error</p></button>
+        </div>
+        <div class="mainPanel" id="change_here">
+
+
+            
+        </div>
+    </main>
+
+
+    <script>
+        function changeContent(content){
+            const mainPanel = document.getElementById('change_here');
+            mainPanel.innerHTML = content;
+        };
+    
+        document.getElementById('SHOES_BUTTON').addEventListener('click', function(){
+            changeContent('<p>THE SHOES PANEL GOES HERE!!!!</p>');
+        });
+        document.getElementById('BLOGS_BUTTON').addEventListener('click', function(){
+            changeContent('     <p>Shëno Titullin e Bllogut</p><input style="width: 300px;" id="blogs_new_title"></input><p>Shëno Bllogun</p><textarea id="blogs_new_content" name="description" rows="8" cols="50" required></textarea><p>Shëno Ditën e Publikimit të Bllogut</p><input id="blogs_new_date" type="date"></input>');
+        });
+        document.getElementById('ACCOUNTS_BUTTON').addEventListener('click', function(){
+            changeContent('<p>ACCOUNT DELETION AND STUFF GO HERE</p>');
+        })
+        document.getElementById('ISSUES_BUTTON').addEventListener('click', function(){
+            changeContent('<p>THERE ARE NO ISSUES! YOU HAVE ISSUES!</p>')
+        });
+    </script>
+</body>
+</html>
+

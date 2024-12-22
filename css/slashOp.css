@@ -1,19 +1,19 @@
 html, body { 
     margin: 0; 
     padding: 0; 
+    font-family: monospace;
 }
 main{
     display:flex;
-    font-family: monospace;
 }
 header{
     background-color: rgb(128, 0, 32);
     margin: 0px;
     width: 100%;
-    height: 80px;
+    height: 5rem;
     display:flex;
     align-items: center;
-    position: relative;
+    position: fixed;
     top: 0;
     left: 0;
 }
@@ -23,21 +23,210 @@ header{
     color: white !important;
 }
 .slashOpLogo{
-    margin: 0px;
     left: 50px;
     width: 60px;
     height: 60px;
-    margin: 10px;
+    margin-left: 10px;
 }
 .sidebar{
+    top: 5rem;
+    position: fixed;
+    margin: 0; 
+    padding: 0px;
     width: 20%;
     background-color: rgb(194, 194, 194);
-    margin: 0%;
     border: 0px, 2px, 2px, 2px;
-    min-width: 200px;
+    min-height: 100vh;
+}
+.tab{
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    background-color: rgb(209, 209, 209);
+    display: flex;
+    min-width: 90%;
+    margin: 5%;
+    height: 60px;
+    border-radius: 10px;
+    border-color: transparent;
+    display:flex;
+    align-items: center;
+}
+.tab:hover{
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    background-color: rgb(232, 232, 232);
+    outline: none;
+    box-shadow: 0;
+}
+.tab_img{
+    margin: 5%;
+    height: 60%;
+    width: 15%;
+}
+.tab_text{
+    margin-left: 5%;
+    font-family: monospace;
 }
 .mainPanel{
+    margin-top: 5rem;
+    margin-left: 20%;
     width: 80%;
-    margin: 0%;
     min-width: 200px;
+    padding: 0px;
+    background-color: rgb(255, 230, 230);
+    min-height: 90vh;
+}
+
+
+
+/* SCROLL BAR CSS*/
+body::-webkit-scrollbar{
+    width: 0.25rem; 
+ }
+ 
+ body::-webkit-scrollbar-track{
+     background: rgbargb(128, 0, 32); 
+ }
+ 
+ body::-webkit-scrollbar-thumb{
+     background: rgb(0,0,0.5);
+ }
+
+
+
+
+ .form-container {
+    display: flex;
+    justify-content: space-between; 
+}
+
+
+.form-container form {
+    width: 30%;
+}
+
+
+.shoe-sizes-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+
+.shoe-size-input {
+    width: 5%;
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.page_line {
+border: none;
+height: 1px;
+background-color: black;
+margin-top: 10px; 
+margin-bottom: 10px; 
+}
+.searchButton{
+width: 100px; 
+padding: 8px;
+margin-left: 0px; 
+display: inline-block; 
+vertical-align: middle;
+font-weight: bold;
+}
+.resize_line_nr{
+border: none;
+height: 0px;
+background-color: light_green;
+margin-top: 0px; 
+margin-bottom: 0px; 
+}
+.resize_line_main{
+border: none;
+height: 0px;
+background-color: light_green;
+margin-top: -30px; 
+margin-bottom: -30px; 
+}
+.header_line {
+border: none;
+height: 3px;
+background-color: black;
+margin-top: 20px; 
+margin-bottom: 20px; 
+}
+input[type="text"] {
+width: 150px; 
+padding: 8px;
+margin-left: 0px; 
+display: inline-block; 
+vertical-align: middle;
+}
+h3 {
+margin-right: 10px
+}
+.costum1{
+margin-right: 10px;
+margin-bottom: 5px;
+}
+h2 {
+display: inline-block; 
+vertical-align: middle; 
+margin-right: 10px; 
+}
+h1 {
+font-weight: bold;
+}
+.same_x_coord {
+display: flex;
+align-items: center; 
+}
+.anash {
+font-size: 12px;
+width: 300px;
+height: 30px;
+
+}
+.perNr {
+font-size: 29.75px;
+margin-right: 10px;
+margin-bottom: 2px;
+margin-right: 21px;
+}
+.InvisibleText {
+display: flex;
+align-items: center; 
+color: gray;
+}
+input.sizeInput{
+width: 25px; 
+height: 15px;
+margin-right: 6px;
+font-size: 12;
+}
+.tabela1{
+background-color: gray;
+margin-top: 35px;
+margin-left: 15px;
+width: 650px;
+height: 405px;
+}
+.shenimetShtese{
+margin-top: 35px;
+margin-left: 25px;
+width: 200px;
+height: 130px;
+padding: 10px;
+resize: none; 
+overflow: auto; 
+box-sizing: border-box; 
+font-size: 16px;
+line-height: 1.5; 
+text-align: left; 
+}
+.sideButton{
+font-size: 30px;
+margin-top: 50px;
+margin-left: 200px; 
+width:175px; 
+height:90px
 }
