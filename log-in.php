@@ -18,11 +18,11 @@
         <p id="error-message"></p>
         <form id="form" method="POST">
             <div>
-                <input type="email" name="email" id="email-input" placeholder="Email" >
+                <input type="email" name="account_address" id="email-input" placeholder="Email" >
             </div>
 
             <div>
-                <input type="password" name="password" id="password-input" placeholder="Password" >
+                <input type="password" name="account_password" id="password-input" placeholder="Password" >
             </div>
 
             <button type="submit">
@@ -32,6 +32,9 @@
 
        <div class="sign-up">
         <p>Don't have an account? <a class="sign" href="sign-up.php">Sign Up</a></p>
+       </div>
+       <div>
+            <a class="forgot-password" href="forgot-password.php">Forgot password?</a>
        </div>
     </div>
 
@@ -51,7 +54,7 @@
             $email = $_POST['account_address'] ?? null;
             $password = $_POST['account_password'] ?? null;
 
-            $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE account_address = ?");
+            $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE LOWER(account_address) = LOWER(?)");
             if (!$stmt){
                 die("Prepare failed: " . $conn->error);
             }

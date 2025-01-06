@@ -31,8 +31,9 @@ CREATE TABLE `accounts` (
   `account_id` int(11) NOT NULL,
   `account_name` text NOT NULL,
   `account_lastname` varchar(16) NOT NULL,
-  `account_address` varchar(32) NOT NULL,
-  `account_password` varchar(32) NOT NULL
+  `account_address` varchar(255) NOT NULL,
+  `account_password` varchar(255) NOT NULL
+  PRIMARY KEY (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 COMMIT;
 
