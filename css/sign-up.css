@@ -8,6 +8,11 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
+body{
+    background-color:var(--bg-color);
+    color:var(--text-color);
+}
+
 body:root{
     --bg-color: #ffffff;
     --text-color: #000000;
@@ -16,10 +21,6 @@ body:root{
 body.dark-mode{
     --bg-color: #000000;
     --text-color: #ffffff;
-}
-body{
-    background-color:var(--bg-color);
-    color:var(--text-color);
 }
 
 

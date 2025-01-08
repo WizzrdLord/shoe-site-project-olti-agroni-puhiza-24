@@ -20,7 +20,7 @@ body{
     height: 100%;
     overflow: auto;
     margin: 1% 1% 1% 1%;
-    background-color: rgb(255, 247, 237);
+    background-color: rgb(129, 129, 129);
 }
 .article{
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
