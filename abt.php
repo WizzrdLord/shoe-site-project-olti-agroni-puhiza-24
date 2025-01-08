@@ -45,5 +45,6 @@ Perdorimi i GIT.
             </div>
         </div>
     </main>
+    <script src="js/theme-toggle.js"></script>
 </body>
 </html>

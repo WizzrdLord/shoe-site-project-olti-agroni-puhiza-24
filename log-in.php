@@ -33,5 +33,6 @@
         <p>Don't have an account? <a class="sign" href="sign-up.php">Sign Up</a></p>
        </div>
     </div>
+    <script src="js/theme-toggle.js"></script>
 </body>
 </html>

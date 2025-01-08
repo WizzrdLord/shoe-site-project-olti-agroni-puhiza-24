@@ -8,12 +8,12 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
-:root{
+body:root{
     --bg-color: #ffffff;
     --text-color: #000000;
 }
 
-.dark-mode{
+body.dark-mode{
     --bg-color: #000000;
     --text-color: #ffffff;
 }

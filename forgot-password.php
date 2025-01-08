@@ -20,5 +20,6 @@
 <button >Send Reset Link</button>
 </form>
     </div>
+    <script src="js/theme-toggle.js"></script>
 </body>
 </html>

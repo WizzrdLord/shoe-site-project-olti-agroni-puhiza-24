@@ -274,6 +274,6 @@
     <footer>
         <p>&copy; 2024 Hat Shoes Store. All rights reserved.</p>
     </footer>
-    <script src="js/index.js"></script>
+    <script src="js/theme-toggle.js"></script>
 </body>
 </html>
