@@ -1,11 +1,19 @@
-<!--Webfaqja të ketë minimum 3 pages si p.sh: 
-Faqen kryesore(Home/Dashboard), About us, Products, News, Contact us.
-Page qe përmban (detajet e produktit, lajmit, ofertes, etj.)
-Përdorimi i JavaScript për validim të kontakt formës dhe Login/Register
-Të krijohet Login dhe Register page/form
-Webfaqja duhet të jetë responsive - ( në këtë fazë nuk është e obligueshme, por rekomandohet që të bëhet pasi që në dorëzimin final dmth në fund të ushtrimeve/semestrit aktual, kjo do te jetë një kërkesë e projektit)
-Përdorimi i slider është sipas dëshirës dhe mundësisë në projekt (do të jetë obligativ për dorëzimin e dytë).
-Perdorimi i GIT.-->
+<!--1. Webfaqja te kete minimum 5 pages si p.sh: Faqen kryesore (index.php), About us, Products, News, Contact us
+2. Te kete login dhe register funksional -> si dhe gjate procesit te logimit te kete role psh admin dhe perdorues i thjeshte.
+3. Varesisht faqeve qe keni p.sh News/Portfolio/Products etj te jane teresisht te populluara nga databaza
+       3.1 Gjate regjistrimit te te dhenave eshte e mundshme te shihet se cili perdorues ka shtuar/modifikuar nje lajm, produkt varesisht llojit te faqes,
+       3.2 Duhet te kete tekst dhe foto ne lajmin/produktin e shtuar ose pdf file,
+       3.3 Te dhenat nga faqja me kontakt form te ruhen ne databaze dhe te kete mundesi me u lexu nga administratori me vone nga pjesa e Dashboard.
+4. Te kete nje dashboard te thjesht per administratorin, i cili menaxhon faqen me loginin e tij me te drejtat specifike te tij.
+5. Ne faqen kryesore, ne about us dhe pothuajse ne secilin faqe te dhenat te lexohen nga databaza dmth mos te kete shume permbajtje statike ne pergjithesi.
+6. Te kete validim te te dhenave ne front end dhe backend si dhe kodi ne PHP te jete i shkruar bazuar ne Objekte: Object Oriented PHP
+    6.1 Ne qofte se kodi eshte i shkruar ne forme Procedurale, projekti vleresohet me maksimumi 30 pike.
+7. Webfaqja duhet te jete responsive dhe te kete slider ne njerin nga faqes p.sh index.php ose diku tjeter ne about us etj
+8. Te demostrohet perdorimi i GitHUB/BitBucket me GIT nga grupi qe secili ka punuar ne pjesen e tij. Perdorimi i ketyre platformave eshte obligativ. 
+    8.1 Detyrat duhet te jene te ndara ne menyre te barabarte per secilin anetare. Secili nga anetare duhet te kete njohuri ne HTML, CSS, JS dhe PHP ne menyre te barabarte.
+9. Projektet te cilat nuk kane back end por vetëm HTML/CSS/Javascript, apo anasjelltas, nuk pranohen per mbrojtje.
+10. Mbrojtja do te behet ne menyre individuale. Vleresimi pozitiv nga mbrojtja behet vetem nese studenti arrin te mbroje punen e tij ne kontekstin full-stack (HTML, CSS, JS dhe PHP). 
+-->
 
 <!DOCTYPE html>
 <html>
@@ -14,83 +22,64 @@ Perdorimi i GIT.-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Hat Shoes Store</title>
+    <link rel="icon" href="images\logo_new.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
     <link rel="stylesheet" href="font-awesome\css\font-awesome.min.css">
-    <link rel="stylesheet" href="css/index-stylesheet.css">
-        
+    <link rel="stylesheet" href="css/index-stylesheet.css?v=1.0">
 </head>
 <body>
     
     <?php require "navbar.php"; ?>
-
+    <?php include "config.php"; ?>
     <main><div class="page-container">
-        <section class="landing" id="home"><!--New Shoes Go Here-->
-            <div class="new-container active">
-                <div class="slide">
-                    <div class="content">
-                        <span>Nokia</span>
-                        <h3>Uranium Runner 308</h3>
-                        <p>
-                            Engineered for speed and style, the Uranium Runner 308 combines lightweight design with durable grip and advanced cushioning. 
-                            Perfect for runners who want a sleek edge on every stride.
-                        </p>
-                        <a href="" class="btn">Order</a>
-                    </div>
-                    <div class="image">
-                        <img src="images\Uranium.png" class="shoe">
-                    </div>
+        <section class="landing" id="home">
+            <?php if (!$db_connected): ?>
+                <div style="color: red; font-size: 1.5rem; font-weight:bolder; text-align:center; padding: 24% 0 24% 0">
+                    Database not online some features may not work!
                 </div>
-            </div>
-            <div class="new-container">
-                <div class="slide">
-                    <div class="content">
-                        <span>Motorola</span>
-                        <h3>Turbo Tread X500</h3>
-                        <p>
-                            A powerhouse sneaker built for speed and durability, 
-                            the Turbo Tread X500 features advanced traction control and shock-absorbing tech for a smooth ride. 
-                            Sleek, bold, and built to "dial up" your performance.
-                        </p>
-                        <a href="" class="btn">Order</a>
-                    </div>
-                    <div class="image">
-                        <img src="images\Turbo.png" class="shoe">
-                    </div>
-                </div>
-            </div>
-            <div class="new-container">
-                <div class="slide">
-                    <div class="content">
-                        <span>LG</span>
-                        <h3>Velocity Vertex 3D</h3>
-                        <p>
-                            Step into ultimate comfort and futuristic style with the Velocity Vertex 3D. 
-                            Designed for peak motion, its lightweight design and breathable build ensure you move fast while keeping life good.
-                        </p>
-                        <a href="" class="btn">Order</a>
-                    </div>
-                    <div class="image">
-                        <img src="images\Velocity.png" class="shoe">
-                    </div>
-                </div>
-            </div>
-            <div class="new-container">
-                <div class="slide">
-                    <div class="content">
-                        <span>Sony</span>
-                        <h3>StrideMaster Pro XT</h3>
-                        <p>
-                            Master every stride with these high-tech sneakers, 
-                            featuring precision cushioning and adaptive grip for any surface. 
-                            The StrideMaster Pro XT brings cinematic style and comfort to every step.
-                        </p>
-                        <a href="" class="btn">Order</a>
-                    </div>
-                    <div class="image">
-                        <img src="images\Stride.png" class="shoe">
-                    </div>
-                </div>
-            </div>
+            <?php else: ?>
+                <?php
+                $sql = "SELECT * FROM shoes ORDER BY date_added DESC LIMIT 4";
+                $result = $conn->query($sql);
 
+                if ($result->num_rows > 0) {
+                    $shoes = [];
+                    while ($row = $result->fetch_assoc()) {
+                        $shoes[] = $row;
+                    }
+                } else {
+                    echo "No shoes found.";
+                }
+                $conn->close();
+                ?>
+
+                <!-- New Shoes Go Here -->
+                <?php 
+                $counter = 0;
+                foreach ($shoes as $shoe):
+                    $activeClass = ($counter == 0) ? 'active' : ''; 
+                    ?>
+                    <div class="new-container <?php echo $activeClass; ?>">
+                        <div class="slide">
+                            <div class="content">
+                                <span><?php echo htmlspecialchars($shoe['brand']); ?></span>
+                                <h3><?php echo htmlspecialchars($shoe['name']); ?></h3>
+                                <p>
+                                    <?php echo htmlspecialchars($shoe['description']); ?>
+                                </p>
+                                <a href="#" class="btn">Order</a>
+                            </div>
+                            <div class="image">
+                                <img src="images/<?php echo htmlspecialchars($shoe['image_path']); ?>" class="shoe">
+                            </div>
+                        </div>
+                    </div>
+                    <?php 
+                    $counter++;
+                endforeach; 
+                ?>
+            <?php endif; ?>
+            
             <div id="prev" class="unselectable arrow-left" onclick="prev()">&#11164;</div>
             <div id="next" class="unselectable arrow-right" onclick="next()">&#11166;</div>
         </section>
@@ -285,6 +274,6 @@ Perdorimi i GIT.-->
     <footer>
         <p>&copy; 2024 Hat Shoes Store. All rights reserved.</p>
     </footer>
-    <script src="./js/index.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
