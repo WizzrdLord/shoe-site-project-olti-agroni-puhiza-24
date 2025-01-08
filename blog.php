@@ -8,7 +8,7 @@
     if($conn->connect_error){
         die("Lidhja dështoi: ".$conn->connect_error);
     }
-    $sql = "SHOW COLUMNS FROM `blogs-table`";
+    $sql = "SELECT * FROM `blogs-table` ORDER BY blog_creation_date DESC";
     $result = $conn->query($sql);
     
 ?>
