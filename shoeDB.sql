@@ -16,10 +16,12 @@ CREATE TABLE shoes(
     material_id INT NOT NULL,                         --Key referencing materials table
     gender ENUM('Men', 'Women', 'Children') NOT NULL, --Gender category for the shoe
     discount DECIMAL(5, 2) DEFAULT 0.00,              --Discount percentage
-    date_added DATE DEFAULT CURRENT_DATE,
-    FOREIGN KEY (color_id) REFERENCES colors(id),
-    FOREIGN KEY (material_id) REFERENCES materials(id)
+    date_added DATE DEFAULT CURRENT_DATE
 );
+--Before Using this create the color and material tables first
+ALTER TABLE shoes
+ADD FOREIGN KEY (color_id) REFERENCES colors(id)
+ADD FOREIGN KEY (material_id) REFERENCES materials(id)
 
 CREATE TABLE colors(
     id INT AUTO_INCREMENT PRIMARY KEY,
