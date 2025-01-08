@@ -32,6 +32,9 @@
        <div class="sign-up">
         <p>Don't have an account? <a class="sign" href="sign-up.php">Sign Up</a></p>
        </div>
+       <div>
+            <a class="forgot-password" href="forgot-password.php">Forgot password?</a>
+       </div>
     </div>
 </body>
 </html>
