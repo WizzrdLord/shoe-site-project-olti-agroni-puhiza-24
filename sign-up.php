@@ -69,7 +69,7 @@
         if ($stmt === false) {
             die("Error preparing statement: " . $conn->error);
         }
-        $stmt->bind_param("ssss", $account_name, $account_lastname, $account_address, $hashed_password);
+        $stmt->bind_param("ssss", $account_name, $account_lastname, $account_address, $account_password);
 
         if ($stmt->execute()) {
             echo "Account successfully created";

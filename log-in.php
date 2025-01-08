@@ -52,25 +52,24 @@
 
         if($_SERVER['REQUEST_METHOD'] == 'POST'){
             $email = $_POST['account_address'] ?? null;
-            $password = $_POST['account_password'] ?? null;
+            $password = $_POST['hashed_password'] ?? null;
 
-            $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE LOWER(account_address) = LOWER(?)");
-            if (!$stmt){
+            $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE LOWER(account_address) = LOWER(?) AND account_password = ?");
+            if (!$stmt) {
                 die("Prepare failed: " . $conn->error);
             }
-            $stmt->bind_param("s", $email);
+            $stmt->bind_param("ss", $email, $hashed_password);
             $stmt->execute();
-            $stmt->bind_result($hashed_password);
-            // $stmt->fetch();
-
-                if ($stmt->fetch()) {
-                    if (password_verify($password, $hashed_password)) {
-                        echo "Log in successful!";
-                    } else {
-                        echo "Invalid email or password";
-                    }
+            $test = $stmt->fetch();
+            echo($test);
+            try {
+                if ($test) {   
+                    echo("Logged in");
                 } else {
                     echo "No account found with this email";
+                }}
+                catch(ErrorException $exception) {
+                    echo '<br>'.$exception->getMessage();
                 }
            $stmt->close();
         }
