@@ -1,7 +1,6 @@
 <!--navbar php-->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap">
 <link rel="stylesheet" href="css/nav.css">
-<link rel="icon" type="image/png" href="images\logo_new.png">
+
 <nav class="navbar">  
         <ul class="navbar-nav">
             <li class="logo">
@@ -37,7 +36,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="blog.php" class="nav-link">
+                <a href="#" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="online-blog">
                         <path d="M195.74 269.89a4 4 0 0 0-6.19.16L168.77 297a19 19 0 0 1-27.15 3l-20.6-17a4 4 0 0 0-5.3.18l-53 50.41H237.5A2.5 2.5 0 0 0 240 331v-9.71l-.55-.81Z"></path>
                         <path d="m130.59 271.36 20.6 17.05a4 4 0 0 0 5.71-.64l20.78-26.89a19 19 0 0 1 29.41-.8L240 298.17V191a2.5 2.5 0 0 0-2.5-2.5h-180A2.5 2.5 0 0 0 55 191v129.09l50.38-47.87a19 19 0 0 1 25.21-.86zM70 231a27.5 27.5 0 1 1 27.5 27.5A27.54 27.54 0 0 1 70 231zm254.5 22.5h120a12.5 12.5 0 0 0 0-25h-120a12.5 12.5 0 0 0 0 25z"></path>
@@ -45,7 +44,7 @@
                         <circle cx="97.5" cy="231" r="12.5"></circle>
                         <path d="M484.5 73.5h-457A27.54 27.54 0 0 0 0 101v22.5h512V101a27.54 27.54 0 0 0-27.5-27.5Zm-50 32.5h-10a7.5 7.5 0 0 1 0-15h10a7.5 7.5 0 0 1 0 15Zm40 0h-10a7.5 7.5 0 0 1 0-15h10a7.5 7.5 0 0 1 0 15Z"></path>
                     </svg>
-                    <span class="link-text">News</span>
+                    <span class="link-text">Blog</span>
                 </a>
             </li>
 
