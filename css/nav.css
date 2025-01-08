@@ -21,9 +21,10 @@ html{
 }
 
 body{
-    color: black;
-    background-color: white;
+    background-color:var(--bg-color);
+    color:var(--text-color);
 }
+
 
 body::-webkit-scrollbar{
    width: 0.25rem; 

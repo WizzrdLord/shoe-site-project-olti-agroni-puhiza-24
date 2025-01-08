@@ -2,10 +2,22 @@ body{
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color:var(--bg-color);
+    color:var(--text-color);
 }
 
 section{
     padding: 2rem 5%;
+}
+
+:root{
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+.dark-mode{
+    --bg-color: #000000;
+    --text-color: #ffffff;
 }
 
 .page-container{

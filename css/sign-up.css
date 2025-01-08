@@ -8,6 +8,20 @@
     box-sizing: border-box;
     font-family: "Poppins", sans-serif;
 }
+:root{
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+.dark-mode{
+    --bg-color: #000000;
+    --text-color: #ffffff;
+}
+body{
+    background-color:var(--bg-color);
+    color:var(--text-color);
+}
+
 
 #firstname-input{
     outline: none;

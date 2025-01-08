@@ -36,7 +36,7 @@
             </li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="blog.php" class="nav-link">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="online-blog">
                         <path d="M195.74 269.89a4 4 0 0 0-6.19.16L168.77 297a19 19 0 0 1-27.15 3l-20.6-17a4 4 0 0 0-5.3.18l-53 50.41H237.5A2.5 2.5 0 0 0 240 331v-9.71l-.55-.81Z"></path>
                         <path d="m130.59 271.36 20.6 17.05a4 4 0 0 0 5.71-.64l20.78-26.89a19 19 0 0 1 29.41-.8L240 298.17V191a2.5 2.5 0 0 0-2.5-2.5h-180A2.5 2.5 0 0 0 55 191v129.09l50.38-47.87a19 19 0 0 1 25.21-.86zM70 231a27.5 27.5 0 1 1 27.5 27.5A27.54 27.54 0 0 1 70 231zm254.5 22.5h120a12.5 12.5 0 0 0 0-25h-120a12.5 12.5 0 0 0 0 25z"></path>
@@ -48,6 +48,16 @@
                 </a>
             </li>
 
+            <li class="nav-item" id="theme-toggle">
+                <a href="#" class="nav-link">
+                <svg width="800px" height="800px" viewBox="-2.4 -2.4 28.80 28.80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000" transform="matrix(1, 0, 0, -1, 0, 0)rotate(90)">
+                <g id="SVGRepo_bgCarrier" stroke-width="0"/>
+                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"/>
+                <g id="SVGRepo_iconCarrier"> <!-- Uploaded to: SVG Repo, www.svgrepo.com, Transformed by: SVG Repo Mixer Tools --> <title>ic_fluent_dark_theme_24_regular</title> <desc>Created with Sketch.</desc> <g id="🔍-Product-Icons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <g id="ic_fluent_dark_theme_24_regular" fill="#212121" fill-rule="nonzero"> <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z" id="🎨-Color"> </path> </g> </g> </g>
+                </svg>
+                <span class="link-text">Visibility Modes</span>
+                </a>
+            </li>
             <li class="nav-item-user">
                 <a href="sign-up.php" class="nav-link">
                     <svg width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -59,3 +69,4 @@
             </li>
         </ul>
     </nav>
+    <script src="theme-toggle.js"></script>

@@ -2,6 +2,19 @@ main{
     display:block;
     margin-right: 2%;
 }
+body{
+    background-color:var(--bg-color);
+    color:var(--text-color);
+}
+:root{
+    --bg-color: #ffffff;
+    --text-color: #000000;
+}
+
+.dark-mode{
+    --bg-color: #000000;
+    --text-color: #ffffff;
+}
 .main-left{
     width: 100%;
     height: 100%;
