@@ -54,3 +54,11 @@ CREATE TABLE stock(
     FOREIGN KEY (shoe_id) REFERENCES shoes(id),
     FOREIGN KEY (size_id) REFERENCES sizes(id)
 );
+
+--Insert Data
+INSERT INTO `colors` (`id`, `color_name`) VALUES (NULL, 'Beige'), (NULL, 'Black'), (NULL, 'Blue'), (NULL, 'Brown'), (NULL, 'Gold'), (NULL, 'Green'), (NULL, 'Grey'), (NULL, 'Orange'),
+ (NULL, 'Purple'), (NULL, 'Red'), (NULL, 'Silver'), (NULL, 'White'), (NULL, 'Yellow')
+
+INSERT INTO `materials` (`id`, `material_name`) VALUES (NULL, 'Canvas'), (NULL, 'Cotton'), (NULL, 'Leather'), (NULL, 'Mesh'), (NULL, 'Nylon'), (NULL, 'Rubber'), (NULL, 'Suede'),
+  (NULL, 'Synthetic')
+

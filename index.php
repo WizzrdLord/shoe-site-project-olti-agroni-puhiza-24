@@ -39,7 +39,7 @@
                 </div>
             <?php else: ?>
                 <?php
-                $sql = "SELECT * FROM shoes ORDER BY date_added DESC LIMIT 4";
+                $sql = "SELECT * FROM shoes ORDER BY date_added DESC";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -57,6 +57,7 @@
                 <?php 
                 $counter = 0;
                 foreach ($shoes as $shoe):
+                    if ($counter >= 4) break;
                     $activeClass = ($counter == 0) ? 'active' : ''; 
                     ?>
                     <div class="new-container <?php echo $activeClass; ?>">
@@ -78,6 +79,7 @@
                     $counter++;
                 endforeach; 
                 ?>
+
             <?php endif; ?>
             
             <div id="prev" class="unselectable arrow-left" onclick="prev()">&#11164;</div>
@@ -179,95 +181,49 @@
             </div>
         </section>
 
-        <section class="gallery" id="gallery"><!--All Shoes Go Here-->
-            <h1 class="heading">Our <span>Products</span></h1>
-            <div class="row-2x2">
-                <div class="image-container">
-                    <div class="small-image">
-                        <img src="images/product1/1.jpg" class="featured-image">
-                        <img src="images/product1/2.jpg" class="featured-image">
-                        <img src="images/product1/3.jpg" class="featured-image">
-                        <img src="images/product1/4.jpg" class="featured-image">
+        <section class="gallery" id="gallery"><!-- All Shoes Go Here -->
+        <h1 class="heading">Our <span>Products</span></h1>
+            <?php foreach ($shoes as $shoe): ?>
+                <div class="row-2x2">
+                    <div class="image-container">
+                        <div class="small-image">
+                            <?php if (!empty($shoe['image_path'])): ?>
+                                <img src="images/<?php echo htmlspecialchars($shoe['image_path']); ?>" class="featured-image">
+                            <?php endif; ?>
+                            <?php if (!empty($shoe['image2'])): ?>
+                                <img src="images/<?php echo htmlspecialchars($shoe['image2']); ?>" class="featured-image">
+                            <?php endif; ?>
+                            <?php if (!empty($shoe['image3'])): ?>
+                                <img src="images/<?php echo htmlspecialchars($shoe['image3']); ?>" class="featured-image">
+                            <?php endif; ?>
+                            <?php if (!empty($shoe['image4'])): ?>
+                                <img src="images/<?php echo htmlspecialchars($shoe['image4']); ?>" class="featured-image">
+                            <?php endif; ?>
+                        </div>
+                        <div class="big-image">
+                            <img src="images/<?php echo htmlspecialchars($shoe['image_path']); ?>" class="large-image">
+                        </div>
                     </div>
-                    <div class="big-image">
-                        <img src="images/product1/1.jpg" class="large-image">
-                    </div>
-                </div>
-                <div class="content">
-                    <h3>Big Boy Shoes</h3>
-                    <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat error delectus accusamus, voluptas commodi sit tenetur eveniet magnam quas aliquid non earum ut hic, soluta neque accusantium cupiditate! Explicabo, impedit?
-                    </p>
-                    <div class="price">$90 <span>$120</span></div>
-                    <a href="" class="btn">Order</a>
-                </div>
-            </div>
-
-            <div class="row-2x2">
-                <div class="image-container">
-                    <div class="small-image">
-                        <img src="images/product2/1.jpg" class="featured-image">
-                        <img src="images/product2/2.jpg" class="featured-image">
-                        <img src="images/product2/3.jpg" class="featured-image">
-                        <img src="images/product2/4.jpg" class="featured-image">
-                    </div>
-                    <div class="big-image">
-                        <img src="images/product2/1.jpg" class="large-image">
-                    </div>
-                </div>
-                <div class="content">
-                    <h3>Big Boy Shoes</h3>
-                    <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat error delectus accusamus, voluptas commodi sit tenetur eveniet magnam quas aliquid non earum ut hic, soluta neque accusantium cupiditate! Explicabo, impedit?
-                    </p>
-                    <div class="price">$90 <span>$120</span></div>
-                    <a href="" class="btn">Order</a>
-                </div>
-            </div>
-
-            <div class="row-2x2">
-                <div class="image-container">
-                    <div class="small-image">
-                        <img src="images/product3/1.jpg" class="featured-image">
-                        <img src="images/product3/2.jpg" class="featured-image">
-                        <img src="images/product3/3.jpg" class="featured-image">
-                        <img src="images/product3/4.jpg" class="featured-image">
-                    </div>
-                    <div class="big-image">
-                        <img src="images/product3/1.jpg" class="large-image">
+                    <div class="content">
+                        <h3><?php echo htmlspecialchars($shoe['name']); ?></h3>
+                        <p>
+                            <?php echo htmlspecialchars($shoe['description']); ?>
+                        </p>
+                        <div class="price">
+                            <?php
+                            if (!empty($shoe['discount']) && $shoe['discount'] > 0): 
+                                $discounted_price = $shoe['price'] - ($shoe['price'] * ($shoe['discount'] / 100));
+                            ?>
+                                $<?php echo number_format($discounted_price, 2); ?> 
+                                <span>$<?php echo number_format($shoe['price'], 2); ?></span>
+                            <?php else: ?>
+                                $<?php echo number_format($shoe['price'], 2); ?>
+                            <?php endif; ?>
+                        </div>
+                        <a href="#" class="btn">Order</a>
                     </div>
                 </div>
-                <div class="content">
-                    <h3>Big Boy Shoes</h3>
-                    <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat error delectus accusamus, voluptas commodi sit tenetur eveniet magnam quas aliquid non earum ut hic, soluta neque accusantium cupiditate! Explicabo, impedit?
-                    </p>
-                    <div class="price">$90 <span>$120</span></div>
-                    <a href="" class="btn">Order</a>
-                </div>
-            </div>
-
-            <div class="row-2x2">
-                <div class="image-container">
-                    <div class="small-image">
-                        <img src="images/product4/1.jpg" class="featured-image">
-                        <img src="images/product4/2.jpg" class="featured-image">
-                        <img src="images/product4/3.jpg" class="featured-image">
-                        <img src="images/product4/5.jpg" class="featured-image">
-                    </div>
-                    <div class="big-image">
-                        <img src="images/product4/1.jpg" class="large-image">
-                    </div>
-                </div>
-                <div class="content">
-                    <h3>Big Boy Shoes</h3>
-                    <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Repellat error delectus accusamus, voluptas commodi sit tenetur eveniet magnam quas aliquid non earum ut hic, soluta neque accusantium cupiditate! Explicabo, impedit?
-                    </p>
-                    <div class="price">$90 <span>$120</span></div>
-                    <a href="" class="btn">Order</a>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </section>
     </div></main>
 
