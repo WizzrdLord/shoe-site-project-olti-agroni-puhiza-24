@@ -33,10 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("sss", $email, $token, $expires_at);
     if ($stmt->execute()) {
         // Send the reset link via email
-        $reset_link = "http://yourwebsite.com/reset-password.php?token=$token";
+        $reset_link = "http://localhost/shoe-site-project-olti-agroni-puhiza-24/auth/reset-password.php?token=$token";
         $subject = "Password Reset Request";
         $message = "Click the link below to reset your password:\n\n$reset_link";
-        $headers = "From: no-reply@yourwebsite.com";
+        $headers = "From: noreply@example.com";
 
         mail($email, $subject, $message, $headers);
 

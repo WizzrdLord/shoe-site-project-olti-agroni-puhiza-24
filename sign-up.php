@@ -40,6 +40,49 @@
     <p>Already have an account? <a class="log" href="log-in.php">Log in</a></p>
      </div>
    </div>
+
+   <?php
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "shoe-store";
+
+    $conn = new mysqli($servername, $username, $password, $database);
+
+    if($conn->connect_error) {
+        die("Lidhja dështoi: " . $conn->connect_error);
+    }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (empty($_POST['firstname'])|| empty($_POST['lastname'])||empty($_POST['email']) ||empty($_POST['password'])) {
+            die("Error: All fields are required.");
+        }
+
+        $account_name = mysqli_real_escape_string($conn, $_POST['firstname']);
+        $account_lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
+        $account_address = mysqli_real_escape_string($conn, $_POST['email']);
+        $account_password = mysqli_real_escape_string($conn, $_POST['password']);
+        $hashed_password = password_hash($account_password, PASSWORD_DEFAULT);
+
+        $sql = "INSERT INTO accounts (account_name,account_lastname,account_address,account_password) VALUES (?, ?, ?, ?)";
+
+        $stmt = $conn->prepare($sql);
+        if ($stmt === false) {
+            die("Error preparing statement: " . $conn->error);
+        }
+        $stmt->bind_param("ssss", $account_name, $account_lastname, $account_address, $account_password);
+
+        if ($stmt->execute()) {
+            echo "Account successfully created";
+        } 
+        else {
+            echo "Account creation failed: " . $stmt->error;
+        }
+
+        $stmt->close();
+        $conn->close();
+    }
+    ?>  
    <script src="js/theme-toggle.js"></script>
 </body>
 </html>
