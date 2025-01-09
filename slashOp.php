@@ -68,7 +68,13 @@
 
         // Event listener for "Këpucët" button
         document.getElementById('SHOES_BUTTON').addEventListener('click', function() {
-            changeContent('<p>THE SHOES PANEL GOES HERE!!!!</p>');
+            fetch('shoesOp.php')
+                .then(response => response.text())  // Get the response as text
+                .then(data => {
+                    // Insert the content from blogsOp.php into the main panel
+                    changeContent(data);
+                })
+                .catch(error => console.error('Error:', error)); // Handle any errors
         });
 
         // Event listener for "Blogjet" button

@@ -57,9 +57,9 @@
                 <?php 
                 $counter = 0;
                 foreach ($shoes as $shoe):
-                    if ($counter >= 4) break;
-                    $activeClass = ($counter == 0) ? 'active' : ''; 
-                    ?>
+                if ($counter >= 4) break;
+                $activeClass = ($counter == 0) ? 'active' : ''; 
+                ?>
                     <div class="new-container <?php echo $activeClass; ?>">
                         <div class="slide">
                             <div class="content">
@@ -75,11 +75,10 @@
                             </div>
                         </div>
                     </div>
-                    <?php 
-                    $counter++;
+                <?php 
+                $counter++;
                 endforeach; 
                 ?>
-
             <?php endif; ?>
             
             <div id="prev" class="unselectable arrow-left" onclick="prev()">&#11164;</div>
@@ -231,5 +230,6 @@
         <p>&copy; 2024 Hat Shoes Store. All rights reserved.</p>
     </footer>
     <script src="js/theme-toggle.js"></script>
+    <script src="js\index.js"></script>
 </body>
 </html>
