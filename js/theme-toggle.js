@@ -1,24 +1,19 @@
-document.getElementById('theme-toggle').addEventListener('click', function () {
+// Dark Mode Toggle
+document.getElementById('theme-toggle').addEventListener('click', function (event) {
+    event.preventDefault(); // Prevent link default behavior
     const isDarkMode = document.body.classList.toggle('dark-mode');
     document.cookie = `theme=${isDarkMode ? 'dark' : 'light'}; path=/;`;
 });
 
-window.addEventListener('DOMContentLoaded', function (){
-    const cookies = this.document.cookie.split('; ');
+// Set Theme on Page Load
+window.addEventListener('DOMContentLoaded', function () {
+    const cookies = document.cookie.split('; ');
     const themeCookie = cookies.find(cookie => cookie.startsWith('theme='));
-    if (themeCookie){
+    if (themeCookie) {
         const theme = themeCookie.split('=')[1];
-        if (theme === 'dark'){
-            this.document.body.classList.add('dark-mode')
+        if (theme === 'dark') {
+            document.body.classList.add('dark-mode');
         }
     }
 });
 
-
-
---// MOS E FSHI: Eshte per navbar glitch
-document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', function(event) {
-        event.preventDefault();
-    });
-});

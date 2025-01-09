@@ -25,7 +25,6 @@ body{
     color:var(--text-color);
 }
 
-
 body::-webkit-scrollbar{
    width: 0.25rem; 
 }
@@ -48,6 +47,7 @@ main{
     position: fixed;
     background-color: var(--bg-secondary);
     transition: width 200ms ease-in-out;
+    z-index: 200; /* Ensures navbar is on top */
 }
 
 .navbar .logo img{
@@ -76,6 +76,7 @@ main{
     display: flex;
     flex-direction: column;
     align-items: center;
+    z-index: 1; /* Ensures navbar items are below the nav links */
 }
 
 .nav-item{
@@ -97,6 +98,8 @@ main{
     height: 5rem;
     color: var(--text-secondary);
     text-decoration: none;
+    z-index: 2; /* Ensures links are on top of everything else */
+    position: relative; /* Makes sure the link is within the correct stacking context */
 }
 
 .link-text:first-child{
@@ -136,7 +139,7 @@ main{
         bottom: 0;
         width: 100vw;
         height: 5rem;
-        z-index: 100;
+        z-index: 100; /* Ensures navbar is on top */
     }
 
     .logo{
@@ -156,23 +159,25 @@ main{
 
     .nav-link{
         justify-content: center;
+        z-index: 102; /* Ensures links are clickable on small screens */
     }
     main{
         margin: 0;
     }
 }
+
 /*Large Screen*/
 @media only screen and (min-width: 768px){
    .navbar{
     top: 0;
     width: 5rem;
-    height: 100vh
-    }
+    height: 100vh;
+   }
    
    .navbar:hover{
     width: 16rem;
     z-index: 100;
-    }
+   }
 
     .nav-item-user{
         position: absolute;

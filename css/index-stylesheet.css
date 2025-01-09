@@ -6,20 +6,19 @@ body{
     color:var(--text-color);
 }
 
-section{
-    padding: 2rem 5%;
-}
-
-:root{
+body:root{
     --bg-color: #ffffff;
     --text-color: #000000;
 }
 
-.dark-mode{
+body.dark-mode{
     --bg-color: #000000;
     --text-color: #ffffff;
 }
 
+section{
+    padding: 2rem 5%;
+}
 .page-container{
     width: 100%;
     max-width: 115rem;

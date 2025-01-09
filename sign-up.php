@@ -40,5 +40,6 @@
     <p>Already have an account? <a class="log" href="log-in.php">Log in</a></p>
      </div>
    </div>
+   <script src="js/theme-toggle.js"></script>
 </body>
 </html>
