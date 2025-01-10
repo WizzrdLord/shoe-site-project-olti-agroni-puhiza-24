@@ -1,35 +1,76 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "shoe-store";
+require 'config.php';
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['action'])) {
+        $action = $_POST['action'];
 
-    // Establish the database connection
-    $conn = new mysqli($servername, $username, $password, $database);
-    if ($conn->connect_error) {
-        die("Lidhja deshtoj: " . $conn->connect_error);
-    }
+        if ($action === 'add_shoe') {
+            $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
+            $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
+            $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
+            $shoe_color = htmlspecialchars(trim($_POST['shoe_color']));
+            $shoe_material = htmlspecialchars(trim($_POST['shoe_material']));
+            $shoe_price = filter_var($_POST['shoe_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+            $shoe_gender = htmlspecialchars(trim($_POST['shoe_gender']));
+            $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
+            $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
 
-    // Handling form submission (via AJAX)
-    if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-        $blog_title = mysqli_real_escape_string($conn, $_POST['blog_title']);
-        $blog_content = mysqli_real_escape_string($conn, $_POST['blog_content']);
-        $blog_creation_date = $_POST['blog_creation_date'];
+            if (
+                empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
+                empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
+                empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
+            ) {
+                die("All fields are required for adding a shoe.");
+            }
 
-        // Insert into the database (make sure the blog_id is auto-incremented)
-        $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) 
-                VALUES ('$blog_title', '$blog_content', '$blog_creation_date')";
+            $sql = "INSERT INTO `shoes-table` (shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, shoe_gender, shoe_discount, shoe_date_added)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("sssssdiss", $shoe_name, $shoe_brand, $shoe_description, $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
+                if ($stmt->execute()) {
+                    echo "Shoe added successfully!";
+                } else {
+                    error_log("Shoe Insert Error: " . $stmt->error);
+                    echo "Failed to add shoe.";
+                }
+                $stmt->close();
+            } else {
+                error_log("Shoe Preparation Error: " . $conn->error);
+                echo "Error preparing the shoe query.";
+            }
 
-        // Execute the query
-        if ($conn->query($sql) === TRUE) {
-            echo "Bllogu u shtua me sukses!"; // Success message
+        } elseif ($action === 'add_blog') {
+            $blog_title = htmlspecialchars(trim($_POST['blog_title']));
+            $blog_content = htmlspecialchars(trim($_POST['blog_content']));
+            $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
+
+            if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
+                die("All fields are required for adding a blog.");
+            }
+
+            $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
+                if ($stmt->execute()) {
+                    echo "Blog added successfully!";
+                } else {
+                    error_log("Blog Insert Error: " . $stmt->error);
+                    echo "Failed to add blog.";
+                }
+                $stmt->close();
+            } else {
+                error_log("Blog Preparation Error: " . $conn->error);
+                echo "Error preparing the blog query.";
+            }
         } else {
-            echo "ERROR: " . $sql . "<br>" . $conn->error; // Error message
+            echo "Invalid action.";
         }
+    } else {
+        echo "Action not specified.";
     }
-
-    // Close the connection
-    $conn->close();
+}
 ?>
 
 
@@ -66,27 +107,94 @@
             mainPanel.innerHTML = content;
         }
 
-        // Event listener for "Këpucët" button
         document.getElementById('SHOES_BUTTON').addEventListener('click', function() {
             fetch('shoesOp.php')
-                .then(response => response.text())  // Get the response as text
+                .then(response => response.text())
                 .then(data => {
-                    // Insert the content from blogsOp.php into the main panel
                     changeContent(data);
+
+                    initFormScripts();
                 })
-                .catch(error => console.error('Error:', error)); // Handle any errors
+            .catch(error => console.error('Error:', error));
         });
 
-        // Event listener for "Blogjet" button
+        function initFormScripts() {
+            // JS Discount Display
+            const discountInput = document.getElementById('discount');
+            const discountValue = document.getElementById('discount_value');
+            
+            if (discountInput) {
+                discountInput.addEventListener('input', function () {
+                    discountValue.textContent = discountInput.value;
+                });
+            }
+        
+            // JS Color Display Replacement
+            const c_input = document.getElementById('color');
+            const c_datalist = document.getElementById('Colors');
+            const c_hiddenInput = document.getElementById('color_value');
+            
+            if (c_input) {
+                c_input.addEventListener('input', function () {
+                    const options = c_datalist.querySelectorAll('option');
+                    const inputValue = c_input.value;
+                    let matched = false;
+                    options.forEach(option => {
+                        if (option.value === inputValue) {
+                            c_hiddenInput.value = option.getAttribute('data-value');
+                            matched = true;
+                        }
+                    });
+                    if (!matched) {
+                        c_hiddenInput.value = '';
+                    }
+                });
+            }
+        
+            // JS Material Display Replacement
+            const m_input = document.getElementById('material');
+            const m_datalist = document.getElementById('Materials');
+            const m_hiddenInput = document.getElementById('material_value');
+            
+            if (m_input) {
+                m_input.addEventListener('input', function () {
+                    const options = m_datalist.querySelectorAll('option');
+                    const inputValue = m_input.value;
+                    let matched = false;
+                    options.forEach(option => {
+                        if (option.value === inputValue) {
+                            m_hiddenInput.value = option.getAttribute('data-value');
+                            matched = true;
+                        }
+                    });
+                    if (!matched) {
+                        m_hiddenInput.value = '';
+                    }
+                });
+            }
+        
+            // JS Auto Date
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+        
+            // Set the value of the date input to today's date
+            const dateInput = document.getElementById('date_added');
+            if (dateInput) {
+                dateInput.value = formattedDate;
+            }
+        }
+
+
         document.getElementById('BLOGS_BUTTON').addEventListener('click', function() {
-            // Fetch the content from blogsOp.php using AJAX
             fetch('blogsOp.php')
-                .then(response => response.text())  // Get the response as text
+                .then(response => response.text())
                 .then(data => {
-                    // Insert the content from blogsOp.php into the main panel
                     changeContent(data);
                 })
-                .catch(error => console.error('Error:', error)); // Handle any errors
+                .catch(error => console.error('Error:', error));
         });
 
         // Event listener for "Llogaritë" button
@@ -122,5 +230,6 @@
         });
 
     </script>
+    <script src="js\shoesOP.js"></script>
 </body>
 </html>

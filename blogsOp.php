@@ -1,4 +1,5 @@
 <form method="POST" action="">
+    <input type="hidden" name="action" value="add_blog">
     <p>Shëno Titullin e Bllogut</p>
     <input id="blogs_new_title" name="blog_title" placeholder="Titulli Shkon Këtu" required>
     
