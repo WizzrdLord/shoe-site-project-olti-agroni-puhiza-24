@@ -1,4 +1,5 @@
 <?php
+require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
@@ -22,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 die("All fields are required for adding a shoe.");
             }
 
-            require 'config.php';
             $sql = "INSERT INTO `shoes-table` (shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, shoe_gender, shoe_discount, shoe_date_added)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = $conn->prepare($sql);
