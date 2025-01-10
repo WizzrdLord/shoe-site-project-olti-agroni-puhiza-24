@@ -16,7 +16,7 @@
     <h1>Create an account</h1>
     <p>Enter your details below</p>
     <p id="error-message"></p>
-    <form id="form">
+    <form id="form" method="POST">
         <div>
             <input type="text" name="firstname" id="firstname-input" placeholder="First Name" >
         </div>
@@ -42,47 +42,63 @@
    </div>
 
    <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $database = "shoe-store";
+// Database connection details
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "shoe-store";
 
-    $conn = new mysqli($servername, $username, $password, $database);
+// Create a connection
+$conn = new mysqli($servername, $username, $password, $database);
 
-    if($conn->connect_error) {
-        die("Lidhja dështoi: " . $conn->connect_error);
+// Check the connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Check if the request method is POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validate form inputs
+    if (empty($_POST['firstname']) || empty($_POST['lastname']) || empty($_POST['email']) || empty($_POST['password'])) {
+        die("Error: All fields are required.");
     }
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        if (empty($_POST['firstname'])|| empty($_POST['lastname'])||empty($_POST['email']) ||empty($_POST['password'])) {
-            die("Error: All fields are required.");
-        }
+    // Sanitize inputs to prevent SQL injection
+    $account_name = $conn->real_escape_string($_POST['firstname']);
+    $account_lastname = $conn->real_escape_string($_POST['lastname']);
+    $account_email = $conn->real_escape_string($_POST['email']);
+    $account_password = $conn->real_escape_string($_POST['password']);
 
-        $account_name = mysqli_real_escape_string($conn, $_POST['firstname']);
-        $account_lastname = mysqli_real_escape_string($conn, $_POST['lastname']);
-        $account_address = mysqli_real_escape_string($conn, $_POST['email']);
-        $account_password = mysqli_real_escape_string($conn, $_POST['password']);
-        $hashed_password = password_hash($account_password, PASSWORD_DEFAULT);
+    // Hash the password for security
+    $hashed_password = password_hash($account_password, PASSWORD_DEFAULT);
 
-        $sql = "INSERT INTO accounts (account_name,account_lastname,account_address,account_password) VALUES (?, ?, ?, ?)";
+    // SQL to insert a new account
+    $sql = "INSERT INTO accounts (account_name, account_lastname, account_address, account_password) VALUES (?, ?, ?, ?)";
 
-        $stmt = $conn->prepare($sql);
-        if ($stmt === false) {
-            die("Error preparing statement: " . $conn->error);
-        }
-        $stmt->bind_param("ssss", $account_name, $account_lastname, $account_address, $account_password);
-
-        if ($stmt->execute()) {
-            echo "Account successfully created";
-        } 
-        else {
-            echo "Account creation failed: " . $stmt->error;
-        }
-
-        $stmt->close();
-        $conn->close();
+    // Prepare and execute the statement
+    $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        die("Error preparing statement: " . $conn->error);
     }
-    ?>  
+
+    // Bind parameters to the query
+    $stmt->bind_param("ssss", $account_name, $account_lastname, $account_email, $hashed_password);
+
+    // Execute the query and check if it was successful
+    if ($stmt->execute()) {
+        echo "Account successfully created.";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    // Close the statement and connection
+    $stmt->close();
+    $conn->close();
+} else {
+    echo "Invalid request method.";
+}
+?>
+
    <script src="js/theme-toggle.js"></script>
 </body>
 </html>
