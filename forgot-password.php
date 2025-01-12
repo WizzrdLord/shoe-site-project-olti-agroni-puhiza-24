@@ -12,7 +12,7 @@
     <div class="container">
     <h1>Forgot Password</h1>
 
-<form method="post" action="reset-password.php">
+<form method="post" action="forgot-password-handler.php">
 
 
 <input type="email" name="email" id="email" placeholder="Email">

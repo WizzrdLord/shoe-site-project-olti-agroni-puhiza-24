@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?php
 require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -74,6 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 
+=======
+>>>>>>> parent of 2d25696 (Forgot to push :P)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,6 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/slashOp.css">
     <link rel="icon" type="image/png" href="images\logo_new.png">
+<<<<<<< HEAD
     <title>/op panel</title>
 </head>
 <body>
@@ -233,3 +237,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="js\shoesOP.js"></script>
 </body>
 </html>
+=======
+    <title>/op pannel</title>
+</head>
+<body>
+    <main>
+        <header>
+            <img src="images\admin_logo.png" class="slashOpLogo">
+            <p class="headerText">/op pannel - ⚠️</p>
+        </header>
+    </main>
+</body>
+</html>
+>>>>>>> parent of 2d25696 (Forgot to push :P)
