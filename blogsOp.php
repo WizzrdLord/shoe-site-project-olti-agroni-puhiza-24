@@ -1,50 +1,66 @@
 <form class="blog-form" method="POST" action="">
+    <input type="hidden" name="action" value="add_blog">
     <p>Shëno Titullin e Bllogut</p>
     <input class="blog-input" id="blogs_new_title" name="blog_title" placeholder="Titulli Shkon Këtu" required>
-    
+
     <p>Shëno Bllogun</p>
     <textarea class="blog-textarea" id="blogs_new_content" name="blog_content" placeholder="Bllogu Shkon Këtu" required></textarea>
-    
+
     <p>Shëno Ditën e Publikimit të Bllogut</p>
     <input class="blog-date" id="blogs_new_date" name="blog_creation_date" type="date" required>
 
     <button class="blog-button" type="submit" id="submit">Shto Artikullin</button>
+</form>
 
-    <input class="blog-input" list="delArticle" placeholder="Zgjidh artikullin per ta fshire">
+<?php
+require 'config.php';
 
-    <button class="blog-button" type="submit" id="submit">Fshij Artikullin</button>
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_blog'])) {
+    $blog_title = htmlspecialchars(trim($_POST['blog_name']));
 
-    <style>
-        .blog-form{
-            padding:20px;
-            border-color: gray;
-            border-radius: 10px;
-            background-color: lightsalmon;
-            margin-top: 50px;
-            margin-left: 50px;
-            align-items: center;
+    if (empty($blog_title)) {
+        die("Blog title is required for deletion.");
+    }
+
+    // Debug: Ensure the blog title is being received
+    error_log("Attempting to delete blog: " . $blog_title);
+
+    // Delete the selected blog
+    $sql = "DELETE FROM `blogs-table` WHERE blog_title = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("s", $blog_title);
+        if ($stmt->execute()) {
+            echo "Blog deleted successfully!";
+        } else {
+            error_log("Blog Deletion Error: " . $stmt->error);
+            echo "Failed to delete the blog.";
         }
-        .blog-input{
-            border-color: black;
-            border-radius: 2px;
-            height: 20px;
+        $stmt->close();
+    } else {
+        error_log("Blog Deletion Preparation Error: " . $conn->error);
+        echo "Error preparing the deletion query.";
+    }
+    exit;
+}
+
+// Default behavior: Fetch the blogs and display the form
+$sql = "SELECT blog_title FROM `blogs-table`";
+$result = $conn->query($sql);
+?>
+<form class="blog-form" method="POST" action="">
+    <p>Zgjidhni artikullin te cilin doni te fshini.</p>
+    <select name="blog_name" id="blog_name" required>
+        <?php
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo "<option value=\"" . htmlspecialchars($row['blog_title']) . "\">" . htmlspecialchars($row['blog_title']) . "</option>";
+            }
+        } else {
+            echo "<option value=\"\">No blogs available</option>";
         }
-        .blog-textarea{
-            border-color: black;
-            border-radius: 2px;
-            padding: 10px;
-            height: 400px;
-            width: 200px;
-        }
-        .blog-button{
-            border-radius: 2px;
-            padding: 10px;
-            background-color: gray;
-            color:white;
-            padding: 10px;
-        }
-        .blog-date{
-            padding: 10px;
-        }
-    </style>
+        ?>
+    </select>
+    <br>
+    <button type="submit" name="delete_blog" class="delete-button">Delete Blog</button>
 </form>

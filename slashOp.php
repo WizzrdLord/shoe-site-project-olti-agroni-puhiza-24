@@ -1,11 +1,17 @@
 <<<<<<< HEAD
 <?php
+// Include the database configuration file to establish a connection.
 require 'config.php';
+
+// Check if the request method is POST to handle form submissions.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Check if the 'action' is set in the POST data.
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
 
+        // Action: Add a new shoe
         if ($action === 'add_shoe') {
+            // Sanitize and trim user inputs to prevent XSS and SQL injection.
             $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
             $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
             $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
@@ -16,57 +22,104 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
             $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
 
+            // Validate that all required fields are filled in.
             if (
                 empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
                 empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
                 empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
             ) {
-                die("All fields are required for adding a shoe.");
+                die("All fields are required for adding a shoe."); // Stop execution if validation fails.
             }
 
-            $sql = "INSERT INTO `shoes-table` (shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, shoe_gender, shoe_discount, shoe_date_added)
+            // Insert the new shoe record into the database.
+            $sql = "INSERT INTO `shoes-table` 
+                    (shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, shoe_gender, shoe_discount, shoe_date_added)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql);
+            $stmt = $conn->prepare($sql); // Prepare the query.
+
             if ($stmt) {
+                // Bind the parameters to the prepared statement.
                 $stmt->bind_param("sssssdiss", $shoe_name, $shoe_brand, $shoe_description, $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
                 if ($stmt->execute()) {
-                    echo "Shoe added successfully!";
+                    echo "Shoe added successfully!"; // Success message.
                 } else {
-                    error_log("Shoe Insert Error: " . $stmt->error);
-                    echo "Failed to add shoe.";
+                    error_log("Shoe Insert Error: " . $stmt->error); // Log the error.
+                    echo "Failed to add shoe."; // User-friendly error message.
                 }
-                $stmt->close();
+                $stmt->close(); // Close the prepared statement.
             } else {
-                error_log("Shoe Preparation Error: " . $conn->error);
-                echo "Error preparing the shoe query.";
+                error_log("Shoe Preparation Error: " . $conn->error); // Log the preparation error.
+                echo "Error preparing the shoe query."; // User-friendly error message.
             }
 
+        // Action: Add a new blog
         } elseif ($action === 'add_blog') {
+            // Sanitize and trim user inputs.
             $blog_title = htmlspecialchars(trim($_POST['blog_title']));
             $blog_content = htmlspecialchars(trim($_POST['blog_content']));
             $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
 
+            // Validate that all required fields are filled in.
             if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
                 die("All fields are required for adding a blog.");
             }
 
+            // Insert the new blog record into the database.
             $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
+            $stmt = $conn->prepare($sql); // Prepare the query.
+
             if ($stmt) {
+                // Bind the parameters to the prepared statement.
                 $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
                 if ($stmt->execute()) {
-                    echo "Blog added successfully!";
+                    echo "Blog added successfully!"; // Success message.
                 } else {
-                    error_log("Blog Insert Error: " . $stmt->error);
-                    echo "Failed to add blog.";
+                    error_log("Blog Insert Error: " . $stmt->error); // Log the error.
+                    echo "Failed to add blog."; // User-friendly error message.
                 }
-                $stmt->close();
+                $stmt->close(); // Close the prepared statement.
             } else {
-                error_log("Blog Preparation Error: " . $conn->error);
-                echo "Error preparing the blog query.";
+                error_log("Blog Preparation Error: " . $conn->error); // Log the preparation error.
+                echo "Error preparing the blog query."; // User-friendly error message.
             }
+
+        // Action: Delete a blog
+        } elseif ($action === 'delete_blog') {
+            // Sanitize and trim the input to prevent SQL injection and remove unwanted whitespace.
+            $blog_name = htmlspecialchars(trim($_POST['blog_name']));
+
+            // Check if the blog name is provided.
+            if (empty($blog_name)) {
+                die("Blog title is required for deletion."); // Prompt for missing input.
+            }
+
+            // Correctly format the DELETE query.
+            $sql = "DELETE FROM `blogs-table` WHERE blog_title = ?";
+            $stmt = $conn->prepare($sql); // Prepare the query.
+
+            if ($stmt) {
+                // Bind the parameter to the prepared statement.
+                $stmt->bind_param("s", $blog_name);
+                if ($stmt->execute()) {
+                    // Check if the row was successfully deleted.
+                    if ($stmt->affected_rows > 0) {
+                        echo "Blog deleted successfully."; // Success message.
+                    } else {
+                        echo "No blog found with that title."; // Blog not found message.
+                    }
+                } else {
+                    error_log("Blog Deletion Error: " . $stmt->error); // Log the execution error.
+                    echo "Failed to delete blog."; // User-friendly error message.
+                }
+                $stmt->close(); // Close the prepared statement.
+            } else {
+                error_log("Blog Deletion Preparation Error: " . $conn->error); // Log the preparation error.
+                echo "Error preparing the blog deletion query."; // User-friendly error message.
+            }
+
+        // Invalid action
         } else {
-            echo "Invalid action.";
+            echo "Invalid action specified.";
         }
     } else {
         echo "Action not specified.";
