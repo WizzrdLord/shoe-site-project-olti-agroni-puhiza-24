@@ -16,7 +16,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
+=======
+        
+>>>>>>> Stashed changes
 =======
         
 >>>>>>> Stashed changes
@@ -28,6 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
                 empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
             ) {
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
                 die("All fields are required for adding a shoe.");
@@ -212,6 +217,87 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Error preparing the shoe query.";
             }
 >>>>>>> Stashed changes
+=======
+                echo "All fields are required for adding a shoe.";
+                exit;
+            }
+        
+            $baseDir = 'images';
+            
+            if (!is_dir($baseDir)) {
+                mkdir($baseDir, 0755, true);
+            }
+        
+            $folders = glob($baseDir . '\\Prod_*', GLOB_ONLYDIR);
+            $nextFolderNumber = count($folders) + 1;
+            $productFolder = $baseDir . "\\Prod_$nextFolderNumber";
+        
+            if (!mkdir($productFolder, 0755, true)) {
+                echo "Failed to create folder for product images.";
+                exit;
+            }
+        
+            $imagePaths = [];
+            if (isset($_FILES['images']) && $_FILES['images']['error'][0] === UPLOAD_ERR_OK) {
+                $totalFiles = count($_FILES['images']['name']);
+                
+                if ($totalFiles != 4) {
+                    echo "Please upload exactly 4 images.";
+                    exit;
+                }
+        
+                for ($i = 0; $i < $totalFiles; $i++) {
+                    $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                    $fileName = basename($_FILES['images']['name'][$i]);
+                    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        
+                    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                        echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
+                        exit;
+                    }
+        
+                    $newFileName = "image" . ($i + 1) . ".$fileExtension";
+                    $fileDestination = $productFolder . "\\" . $newFileName;
+        
+                    if (move_uploaded_file($fileTmpPath, $fileDestination)) {
+                        $imagePaths[] = $fileDestination;
+                    } else {
+                        echo "Failed to upload image" . ($i + 1);
+                        exit;
+                    }
+                }
+            } else {
+                echo "No files uploaded or error uploading files.";
+                exit;
+            }
+        
+            $sql = "INSERT INTO shoes_table (
+                shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, 
+                shoe_gender, shoe_discount, shoe_date_added, image1, image2, image3, image4
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param(
+                    "sssssdissssss",
+                    $shoe_name, $shoe_brand, $shoe_description, $shoe_color, $shoe_material, $shoe_price,
+                    $shoe_gender, $shoe_discount, $shoe_date_added,
+                    $imagePaths[0], $imagePaths[1], $imagePaths[2], $imagePaths[3]
+                );
+        
+                if ($stmt->execute()) {
+                    echo "Shoe added successfully!";
+                } else {
+                    error_log("Shoe Insert Error: " . $stmt->error);
+                    echo "Failed to add shoe.";
+                }
+                $stmt->close();
+            } else {
+                error_log("Shoe Preparation Error: " . $conn->error);
+                echo "Error preparing the shoe query.";
+            }
+>>>>>>> Stashed changes
         } elseif ($action === 'add_blog') {
             $blog_title = htmlspecialchars(trim($_POST['blog_title']));
             $blog_content = htmlspecialchars(trim($_POST['blog_content']));
@@ -224,7 +310,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+=======
+            $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+>>>>>>> Stashed changes
 =======
             $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
 >>>>>>> Stashed changes
@@ -247,7 +337,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 =======
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
             
@@ -279,6 +372,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Error preparing the delete query.";
             }
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
