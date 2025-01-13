@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_blog'])) {
     error_log("Attempting to delete blog: " . $blog_title);
 
     // Delete the selected blog
-    $sql = "DELETE FROM `blogs-table` WHERE blog_title = ?";
+    $sql = "DELETE FROM `blogs_table` WHERE blog_title = ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("s", $blog_title);
@@ -44,13 +44,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_blog'])) {
     exit;
 }
 
-// Default behavior: Fetch the blogs and display the form
-$sql = "SELECT blog_title FROM `blogs-table`";
+$sql = "SELECT blog_title FROM `blogs_table`";
 $result = $conn->query($sql);
 ?>
 <form class="blog-form" method="POST" action="">
-    <p>Zgjidhni artikullin te cilin doni te fshini.</p>
-    <select name="blog_name" id="blog_name" required>
+    <input type="hidden" name="action" value="delete_blog"> <!-- Add this line -->
+    <p>Select the blog you want to delete:</p>
+    <select name="blog_title" id="blog_title" required>
         <?php
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {

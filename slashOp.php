@@ -1,17 +1,11 @@
-<<<<<<< HEAD
 <?php
-// Include the database configuration file to establish a connection.
 require 'config.php';
 
-// Check if the request method is POST to handle form submissions.
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Check if the 'action' is set in the POST data.
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
 
-        // Action: Add a new shoe
         if ($action === 'add_shoe') {
-            // Sanitize and trim user inputs to prevent XSS and SQL injection.
             $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
             $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
             $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
@@ -22,102 +16,86 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
             $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
 
-            // Validate that all required fields are filled in.
             if (
                 empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
                 empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
                 empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
             ) {
-                die("All fields are required for adding a shoe."); // Stop execution if validation fails.
+                die("All fields are required for adding a shoe.");
             }
 
-            // Insert the new shoe record into the database.
-            $sql = "INSERT INTO `shoes-table` 
+            $sql = "INSERT INTO `shoes_table` 
                     (shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, shoe_gender, shoe_discount, shoe_date_added)
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $conn->prepare($sql); // Prepare the query.
+            $stmt = $conn->prepare($sql);
 
             if ($stmt) {
-                // Bind the parameters to the prepared statement.
                 $stmt->bind_param("sssssdiss", $shoe_name, $shoe_brand, $shoe_description, $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
                 if ($stmt->execute()) {
-                    echo "Shoe added successfully!"; // Success message.
+                    echo "Shoe added successfully!";
                 } else {
-                    error_log("Shoe Insert Error: " . $stmt->error); // Log the error.
-                    echo "Failed to add shoe."; // User-friendly error message.
+                    error_log("Shoe Insert Error: " . $stmt->error);
+                    echo "Failed to add shoe.";
                 }
-                $stmt->close(); // Close the prepared statement.
+                $stmt->close();
             } else {
-                error_log("Shoe Preparation Error: " . $conn->error); // Log the preparation error.
-                echo "Error preparing the shoe query."; // User-friendly error message.
+                error_log("Shoe Preparation Error: " . $conn->error);
+                echo "Error preparing the shoe query.";
             }
 
-        // Action: Add a new blog
         } elseif ($action === 'add_blog') {
-            // Sanitize and trim user inputs.
             $blog_title = htmlspecialchars(trim($_POST['blog_title']));
             $blog_content = htmlspecialchars(trim($_POST['blog_content']));
             $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
 
-            // Validate that all required fields are filled in.
             if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
                 die("All fields are required for adding a blog.");
             }
 
-            // Insert the new blog record into the database.
-            $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql); // Prepare the query.
+            $sql = "INSERT INTO `blogs_table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+            $stmt = $conn->prepare($sql);
 
             if ($stmt) {
-                // Bind the parameters to the prepared statement.
                 $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
                 if ($stmt->execute()) {
-                    echo "Blog added successfully!"; // Success message.
+                    echo "Blog added successfully!";
                 } else {
-                    error_log("Blog Insert Error: " . $stmt->error); // Log the error.
-                    echo "Failed to add blog."; // User-friendly error message.
+                    error_log("Blog Insert Error: " . $stmt->error);
+                    echo "Failed to add blog.";
                 }
-                $stmt->close(); // Close the prepared statement.
+                $stmt->close();
             } else {
-                error_log("Blog Preparation Error: " . $conn->error); // Log the preparation error.
-                echo "Error preparing the blog query."; // User-friendly error message.
+                error_log("Blog Preparation Error: " . $conn->error);
+                echo "Error preparing the blog query.";
             }
 
-        // Action: Delete a blog
         } elseif ($action === 'delete_blog') {
-            // Sanitize and trim the input to prevent SQL injection and remove unwanted whitespace.
-            $blog_name = htmlspecialchars(trim($_POST['blog_name']));
+            $blog_name = htmlspecialchars(trim($_POST['blog_title']));
 
-            // Check if the blog name is provided.
             if (empty($blog_name)) {
-                die("Blog title is required for deletion."); // Prompt for missing input.
+                die("Blog title is required for deletion.");
             }
 
-            // Correctly format the DELETE query.
-            $sql = "DELETE FROM `blogs-table` WHERE blog_title = ?";
-            $stmt = $conn->prepare($sql); // Prepare the query.
+            $sql = "DELETE FROM `blogs_table` WHERE blog_title = ?";
+            $stmt = $conn->prepare($sql);
 
             if ($stmt) {
-                // Bind the parameter to the prepared statement.
                 $stmt->bind_param("s", $blog_name);
                 if ($stmt->execute()) {
-                    // Check if the row was successfully deleted.
                     if ($stmt->affected_rows > 0) {
-                        echo "Blog deleted successfully."; // Success message.
+                        echo "Blog deleted successfully.";
                     } else {
-                        echo "No blog found with that title."; // Blog not found message.
+                        echo "No blog found with that title.";
                     }
                 } else {
-                    error_log("Blog Deletion Error: " . $stmt->error); // Log the execution error.
-                    echo "Failed to delete blog."; // User-friendly error message.
+                    error_log("Blog Deletion Error: " . $stmt->error);
+                    echo "Failed to delete blog.";
                 }
-                $stmt->close(); // Close the prepared statement.
+                $stmt->close();
             } else {
-                error_log("Blog Deletion Preparation Error: " . $conn->error); // Log the preparation error.
-                echo "Error preparing the blog deletion query."; // User-friendly error message.
+                error_log("Blog Deletion Preparation Error: " . $conn->error);
+                echo "Error preparing the blog deletion query.";
             }
-
-        // Invalid action
         } else {
             echo "Invalid action specified.";
         }
@@ -128,8 +106,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 
-=======
->>>>>>> parent of 2d25696 (Forgot to push :P)
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -137,7 +113,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/slashOp.css">
     <link rel="icon" type="image/png" href="images\logo_new.png">
-<<<<<<< HEAD
     <title>/op panel</title>
 </head>
 <body>
@@ -265,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
 
         // Handle form submission via AJAX in blogsOp.php
-        // Handle form submission via AJAX in blogsOp.php
         document.querySelector('form').addEventListener('submit', function(event) {
             // Prevent the form from submitting normally
             event.preventDefault();
@@ -283,23 +257,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Optionally display a success message or update the content after form submission
                 alert('Bllogu u shtua me sukses!');
             })
-            .catch(error => console.error('Error:', error));  // Handle any errors
+            .catch(error => console.error('Error:', error));
         });
 
     </script>
     <script src="js\shoesOP.js"></script>
 </body>
 </html>
-=======
-    <title>/op pannel</title>
-</head>
-<body>
-    <main>
-        <header>
-            <img src="images\admin_logo.png" class="slashOpLogo">
-            <p class="headerText">/op pannel - ⚠️</p>
-        </header>
-    </main>
-</body>
-</html>
->>>>>>> parent of 2d25696 (Forgot to push :P)
