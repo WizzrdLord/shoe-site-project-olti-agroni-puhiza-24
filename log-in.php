@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +9,9 @@
     <link rel="stylesheet" href="css/log-in.css">
     <script src="js/validation.js" defer></script>
 </head>
+
 <body>
-    
+
     <?php require "navbar.php"; ?>
 
     <div class="log-in-container">
@@ -17,66 +19,69 @@
         <p id="error-message"></p>
         <form id="form" action="index.php">
             <div>
-                <input type="email" name="email" id="email-input" placeholder="Email" >
+                <input type="email" name="email" id="email-input" placeholder="Email">
             </div>
 
             <div>
-                <input type="password" name="password" id="password-input" placeholder="Password" >
+                <input type="password" name="password" id="password-input" placeholder="Password">
             </div>
 
             <button type="submit">
                 Log In
             </button>
-       </form>
+        </form>
 
-       <div class="sign-up">
-        <p>Don't have an account? <a class="sign" href="sign-up.php">Sign Up</a></p>
-       </div>
-       <div>
+        <div class="sign-up">
+            <p>Don't have an account? <a class="sign" href="sign-up.php">Sign Up</a></p>
+        </div>
+        <div>
             <a class="forgot-password" href="forgot-password.php">Forgot password?</a>
-       </div>
+        </div>
     </div>
 
     <?php
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $database = "shoe-store";
+    $servername = "localhost";
+    $username = "root";
+    $password = "";
+    $database = "shoe-store";
 
-        $conn = new mysqli($servername, $username, $password, $database);
+    $conn = new mysqli($servername, $username, $password, $database);
 
-        if($conn->connect_error) {
-            die("Lidhja dështoi: " . $conn->connect_error);
+    if ($conn->connect_error) {
+        die("Lidhja dështoi: " . $conn->connect_error);
+    }
+
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $email = $_POST['email'] ?? null;
+        $password = $_POST['password'] ?? null;
+
+        // Check if the email or password is "admin"
+        if ($email == "admin" || $password == "admin") {
+            header("Location: slashOp.php");
+            exit; // Stop further execution after redirection
         }
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $email = $_POST['account_address'] ?? null;
-
-            $password = $_POST['hashed_password'] ?? null;
-
-            $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE LOWER(account_address) = LOWER(?) AND account_password = ?");
-            if (!$stmt) {
-                die("Prepare failed: " . $conn->error);
-            }
-            $stmt->bind_param("ss", $email, $hashed_password);
-            $stmt->execute();
-
-            $test = $stmt->fetch();
-            echo($test);
-            try {
-                if ($test) {   
-                    echo("Logged in");
-                } else {
-                    echo "No account found with this email";
-                }}
-                catch(ErrorException $exception) {
-                    echo '<br>'.$exception->getMessage();
-                }
-           $stmt->close();
+        // Use prepared statements for security
+        $stmt = $conn->prepare("SELECT account_password FROM accounts WHERE LOWER(account_address) = LOWER(?) AND account_password = ?");
+        if (!$stmt) {
+            die("Prepare failed: " . $conn->error);
         }
+        $stmt->bind_param("ss", $email, $password);
+        $stmt->execute();
 
-        $conn->close();
-    ?>
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            echo "Logged in successfully.";
+        } else {
+            echo "No account found with this email and password.";
+        }
+        $stmt->close();
+    }
+
+    $conn->close();
+?>
+
     <script src="js/theme-toggle.js"></script>
 </body>
+
 </html>
