@@ -14,12 +14,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $shoe_gender = htmlspecialchars(trim($_POST['shoe_gender']));
             $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
             $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
+<<<<<<< Updated upstream
 
+=======
+        
+>>>>>>> Stashed changes
             if (
                 empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
                 empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
                 empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
             ) {
+<<<<<<< Updated upstream
                 die("All fields are required for adding a shoe.");
             }
 
@@ -40,16 +45,102 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo "Error preparing the shoe query.";
             }
 
+=======
+                echo "All fields are required for adding a shoe.";
+                exit;
+            }
+        
+            $baseDir = 'images';
+            
+            if (!is_dir($baseDir)) {
+                mkdir($baseDir, 0755, true);
+            }
+        
+            $folders = glob($baseDir . '\\Prod_*', GLOB_ONLYDIR);
+            $nextFolderNumber = count($folders) + 1;
+            $productFolder = $baseDir . "\\Prod_$nextFolderNumber";
+        
+            if (!mkdir($productFolder, 0755, true)) {
+                echo "Failed to create folder for product images.";
+                exit;
+            }
+        
+            $imagePaths = [];
+            if (isset($_FILES['images']) && $_FILES['images']['error'][0] === UPLOAD_ERR_OK) {
+                $totalFiles = count($_FILES['images']['name']);
+                
+                if ($totalFiles != 4) {
+                    echo "Please upload exactly 4 images.";
+                    exit;
+                }
+        
+                for ($i = 0; $i < $totalFiles; $i++) {
+                    $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                    $fileName = basename($_FILES['images']['name'][$i]);
+                    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+        
+                    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                    if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                        echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
+                        exit;
+                    }
+        
+                    $newFileName = "image" . ($i + 1) . ".$fileExtension";
+                    $fileDestination = $productFolder . "\\" . $newFileName;
+        
+                    if (move_uploaded_file($fileTmpPath, $fileDestination)) {
+                        $imagePaths[] = $fileDestination;
+                    } else {
+                        echo "Failed to upload image" . ($i + 1);
+                        exit;
+                    }
+                }
+            } else {
+                echo "No files uploaded or error uploading files.";
+                exit;
+            }
+        
+            $sql = "INSERT INTO shoes_table (
+                shoe_name, shoe_brand, shoe_description, shoe_color, shoe_material, shoe_price, 
+                shoe_gender, shoe_discount, shoe_date_added, image1, image2, image3, image4
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param(
+                    "sssssdissssss",
+                    $shoe_name, $shoe_brand, $shoe_description, $shoe_color, $shoe_material, $shoe_price,
+                    $shoe_gender, $shoe_discount, $shoe_date_added,
+                    $imagePaths[0], $imagePaths[1], $imagePaths[2], $imagePaths[3]
+                );
+        
+                if ($stmt->execute()) {
+                    echo "Shoe added successfully!";
+                } else {
+                    error_log("Shoe Insert Error: " . $stmt->error);
+                    echo "Failed to add shoe.";
+                }
+                $stmt->close();
+            } else {
+                error_log("Shoe Preparation Error: " . $conn->error);
+                echo "Error preparing the shoe query.";
+            }
+>>>>>>> Stashed changes
         } elseif ($action === 'add_blog') {
             $blog_title = htmlspecialchars(trim($_POST['blog_title']));
             $blog_content = htmlspecialchars(trim($_POST['blog_content']));
             $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
 
             if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
-                die("All fields are required for adding a blog.");
+                echo "All fields are required for adding a blog.";
+                exit;
             }
 
+<<<<<<< Updated upstream
             $sql = "INSERT INTO `blogs-table` (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+=======
+            $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+>>>>>>> Stashed changes
             $stmt = $conn->prepare($sql);
             if ($stmt) {
                 $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
@@ -64,6 +155,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 error_log("Blog Preparation Error: " . $conn->error);
                 echo "Error preparing the blog query.";
             }
+<<<<<<< Updated upstream
+=======
+            
+        } elseif ($action === 'delete_blog') {
+            $blog_title = htmlspecialchars(trim($_POST['blog_title']));
+
+            if (empty($blog_title)) {
+                echo "Blog title is required to delete a blog.";
+                exit;
+            }
+
+            $sql = "DELETE FROM blogs_table WHERE blog_title = ?";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("s", $blog_title);
+                if ($stmt->execute()) {
+                    if ($stmt->affected_rows > 0) {
+                        echo "Blog deleted successfully.";
+                    } else {
+                        echo "No blog found with the specified title.";
+                    }
+                } else {
+                    error_log("Blog Delete Error: " . $stmt->error);
+                    echo "Failed to delete blog.";
+                }
+                $stmt->close();
+            } else {
+                error_log("Blog Preparation Error: " . $conn->error);
+                echo "Error preparing the delete query.";
+            }
+>>>>>>> Stashed changes
         } else {
             echo "Invalid action.";
         }
@@ -72,7 +194,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -101,7 +222,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </main>
 
     <script>
-        // Function to change the content of the main panel
         function changeContent(content) {
             const mainPanel = document.getElementById('change_here');
             mainPanel.innerHTML = content;
@@ -112,80 +232,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 .then(response => response.text())
                 .then(data => {
                     changeContent(data);
+                    // JS Discount Display
+                    const discountInput = document.getElementById('discount');
+                    const discountValue = document.getElementById('discount_value');
 
-                    initFormScripts();
+                    if (discountInput) {
+                        discountInput.addEventListener('input', function () {
+                            discountValue.textContent = discountInput.value;
+                        });
+                    }
+                    // JS Color Display Replacement
+                    const c_input = document.getElementById('color');
+                    const c_datalist = document.getElementById('Colors');
+                    const c_hiddenInput = document.getElementById('color_value');
+
+                    if (c_input) {
+                        c_input.addEventListener('input', function () {
+                            const options = c_datalist.querySelectorAll('option');
+                            const inputValue = c_input.value;
+                            let matched = false;
+                            options.forEach(option => {
+                                if (option.value === inputValue) {
+                                    c_hiddenInput.value = option.getAttribute('data-value');
+                                    matched = true;
+                                }
+                            });
+                            if (!matched) {
+                                c_hiddenInput.value = '';
+                            }
+                        });
+                    }
+                    // JS Material Display Replacement
+                    const m_input = document.getElementById('material');
+                    const m_datalist = document.getElementById('Materials');
+                    const m_hiddenInput = document.getElementById('material_value');
+
+                    if (m_input) {
+                        m_input.addEventListener('input', function () {
+                            const options = m_datalist.querySelectorAll('option');
+                            const inputValue = m_input.value;
+                            let matched = false;
+                            options.forEach(option => {
+                                if (option.value === inputValue) {
+                                    m_hiddenInput.value = option.getAttribute('data-value');
+                                    matched = true;
+                                }
+                            });
+                            if (!matched) {
+                                m_hiddenInput.value = '';
+                            }
+                        });
+                    }
+                    // JS Auto Date
+                    const today = new Date();
+                    const yyyy = today.getFullYear();
+                    const mm = String(today.getMonth() + 1).padStart(2, '0');
+                    const dd = String(today.getDate()).padStart(2, '0');
+                    const formattedDate = `${yyyy}-${mm}-${dd}`;
+                    const dateInput = document.getElementById('date_added');
+                    if (dateInput) {
+                        dateInput.value = formattedDate;
+                    }
                 })
-            .catch(error => console.error('Error:', error));
-        });
-
-        function initFormScripts() {
-            // JS Discount Display
-            const discountInput = document.getElementById('discount');
-            const discountValue = document.getElementById('discount_value');
-            
-            if (discountInput) {
-                discountInput.addEventListener('input', function () {
-                    discountValue.textContent = discountInput.value;
-                });
-            }
-        
-            // JS Color Display Replacement
-            const c_input = document.getElementById('color');
-            const c_datalist = document.getElementById('Colors');
-            const c_hiddenInput = document.getElementById('color_value');
-            
-            if (c_input) {
-                c_input.addEventListener('input', function () {
-                    const options = c_datalist.querySelectorAll('option');
-                    const inputValue = c_input.value;
-                    let matched = false;
-                    options.forEach(option => {
-                        if (option.value === inputValue) {
-                            c_hiddenInput.value = option.getAttribute('data-value');
-                            matched = true;
-                        }
-                    });
-                    if (!matched) {
-                        c_hiddenInput.value = '';
-                    }
-                });
-            }
-        
-            // JS Material Display Replacement
-            const m_input = document.getElementById('material');
-            const m_datalist = document.getElementById('Materials');
-            const m_hiddenInput = document.getElementById('material_value');
-            
-            if (m_input) {
-                m_input.addEventListener('input', function () {
-                    const options = m_datalist.querySelectorAll('option');
-                    const inputValue = m_input.value;
-                    let matched = false;
-                    options.forEach(option => {
-                        if (option.value === inputValue) {
-                            m_hiddenInput.value = option.getAttribute('data-value');
-                            matched = true;
-                        }
-                    });
-                    if (!matched) {
-                        m_hiddenInput.value = '';
-                    }
-                });
-            }
-        
-            // JS Auto Date
-            const today = new Date();
-            const yyyy = today.getFullYear();
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const dd = String(today.getDate()).padStart(2, '0');
-            const formattedDate = `${yyyy}-${mm}-${dd}`;
-        
-            // Set the value of the date input to today's date
-            const dateInput = document.getElementById('date_added');
-            if (dateInput) {
-                dateInput.value = formattedDate;
-            }
-        }
+                .catch(error => console.error('Error:', error));
+        });     
 
 
         document.getElementById('BLOGS_BUTTON').addEventListener('click', function() {
@@ -209,27 +319,37 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Handle form submission via AJAX in blogsOp.php
         // Handle form submission via AJAX in blogsOp.php
-        document.querySelector('form').addEventListener('submit', function(event) {
-            // Prevent the form from submitting normally
-            event.preventDefault();
+        function initFormScripts() {
+            console.log("Initializing form scripts.");
 
-            const formData = new FormData(event.target); // Get form data
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
 
-            // Send the form data to blogsOp.php via AJAX
-            fetch('blogsOp.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())  // Get the response from the server
-            .then(data => {
-                console.log('Form submitted successfully:', data);
-                // Optionally display a success message or update the content after form submission
-                alert('Bllogu u shtua me sukses!');
-            })
-            .catch(error => console.error('Error:', error));  // Handle any errors
-        });
+                    const formData = new FormData(event.target);
 
+                    fetch('blogsOp.php', {
+                        method: 'POST',
+                        body: formData,
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Form submission response:", data);
+                            alert(data); // Display success or error message
+
+                            // Refresh the blogs dropdown after deletion
+                            fetch('blogsOp.php')
+                                .then(response => response.text())
+                                .then(updatedContent => {
+                                    document.getElementById('change_here').innerHTML = updatedContent;
+                                    initFormScripts(); // Reinitialize scripts for new content
+                                })
+                                .catch(error => console.error("Error refreshing blogs:", error));
+                        })
+                        .catch(error => console.error("Error:", error));
+                });
+            });
+        }
     </script>
-    <script src="js\shoesOP.js"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="css\shoeOP.css">
 <form method="POST" action="" class="shoe-form">
     <input type="hidden" name="action" value="add_shoe">
 
@@ -13,6 +14,12 @@
         </div>
     </div>
 
+    <div class="form-group">
+        <label for="images">Upload 4 Images</label>
+        <input type="file" name="images[]" id="images" accept="image/*" multiple required>
+    </div>
+
+    
     <div class="form-group">
         <label for="description">Shoe Description</label>
         <textarea id="description" name="shoe_description" placeholder="Shoe Description" required></textarea>
@@ -60,7 +67,7 @@
     <div class="form-row">
         <div class="form-group">
             <label for="price">Price</label>
-            <input id="price" name="shoe_price" placeholder="0$" required>
+            <input id="price" name="shoe_price" placeholder="0.00$" required>
         </div>
 
         <div class="form-group">
@@ -141,4 +148,3 @@
 
     <button type="submit" class="add_shoe">Add Shoe</button>
 </form>
-<link rel="stylesheet" href="css\shoeOP.css">

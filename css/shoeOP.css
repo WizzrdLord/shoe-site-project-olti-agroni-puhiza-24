@@ -66,6 +66,20 @@
     outline: none;
 }
 
+.shoe-form .form-row.image-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.shoe-form .form-row.image-row .form-group{
+    flex: 1 1 22%;
+    margin-bottom: 1rem;
+}
+
+.shoe-form .form-row.image-row .form-group input{
+    padding: 5px;
+}
 
 @media (max-width: 768px){
     .form-group {
