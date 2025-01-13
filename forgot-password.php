@@ -15,13 +15,21 @@
 <form method="post" action="reset-password.php">
 
 
-<input type="email" name="email" id="email" placeholder="Email">
+<input type="email" name="email" id="email" placeholder="Email" required>
 
-<button >Send Reset Link</button>
+<button type="submit" >Send Reset Link</button>
 </form>
     </div>
 
     <?php
+require_once 'PHPMailer/src/Exception.php';
+require_once 'PHPMailer/src/PHPMailer.php';
+require_once 'PHPMailer/src/SMTP.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+// Database connection
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -33,36 +41,58 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email']);
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
 
-    // Check if email exists in the users table
-    $stmt = $conn->prepare("SELECT * FROM accounts WHERE account_address = ?");
-    $stmt->bind_param("s", $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    // Check if the email exists in the database
+    $sql = "SELECT * FROM accounts WHERE account_address = '$email'";
+    $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        // Generate a unique token
-        $token = bin2hex(random_bytes(50));
-        $expires_at = date("Y-m-d H:i:s", strtotime("+1 hour")); // Token valid for 1 hour
+        // Generate a reset token
+        $token = bin2hex(random_bytes(50));  // Secure random token
 
-        // Store the token in the password_reset_tokens table
-        $stmt = $conn->prepare("INSERT INTO passwordreset(email, token, expires_at) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $email, $token, $expires_at);
-        $stmt->execute();
+        // Store the token in the database (token expiration can also be added)
+        $sql = "UPDATE passwordreset SET token = '$token' WHERE email = '$email'";
+        $conn->query($sql);
 
-        // Display the reset link (for demo purposes)
-        $resetLink = "http://localhost/shoe-site-project/reset-password.php?token=$token";
-        echo "Password reset link: <a href='$resetLink'>$resetLink</a>";
+        // Send reset password email using PHPMailer
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->isSMTP();
+            $mail->Host = 'smtp.example.com';  // Set the SMTP server
+            $mail->SMTPAuth = true;
+            $mail->Username = 'hat-shoes.noreply@example.com';  // SMTP username
+            $mail->Password = 'your_password';  // SMTP password
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            // Recipients
+            $mail->setFrom('hat-shoes.noreply@example.com', 'Hat Shoes');
+            $mail->addAddress($email);
+
+            // Content
+            $resetLink = "http://localhost/shoe-site-project-olti-agroni-puhiza-24/reset-password.php?token=$token";
+            $mail->isHTML(true);
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = "Click <a href='$resetLink'>here</a> to reset your password.";
+
+            $mail->send();
+
+            // Redirect to reset page with token as URL parameter
+            header("Location: reset-password.php?token=$token");
+            exit; // Make sure no further code is executed after redirection
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     } else {
-        echo "No user found with that email address.";
+        echo "Email not found!";
     }
 }
-
-
-
 ?>
+
 
     <script src="js/theme-toggle.js"></script>
 </body>

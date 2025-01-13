@@ -9,17 +9,9 @@
 <body>
     <?php require "navbar.php"; ?>
     <h1>Reset Password</h1>
-    <?php
-    // Debugging: Enable error reporting
-    ini_set('display_errors', 1);
-    error_reporting(E_ALL); 
-
-    // Check for the token in the URL
-    $token = isset($_GET['token']) ? $_GET['token'] : null;
-
-    if (!empty($token)) {
-        echo "Token found: " . htmlspecialchars($token);
-    ?>
+    
+   
+   
         <form method="POST" action="reset-password.php">
             <div>
                 <input type="password" name="password" id="password" placeholder="Password" required>
@@ -30,11 +22,7 @@
             <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
             <button type="submit">Reset Password</button>
         </form>
-    <?php
-    } else {
-        echo "Token is missing or invalid.";
-    }
-    ?>
+   
 
     <?php
     // Database Connection
@@ -49,52 +37,44 @@
         die("Connection failed: " . $conn->connect_error);
     }
 
-    // Process Form Submission
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Check for required fields
-        if (isset($_POST['token'], $_POST['password'], $_POST['confirm-password'])) {
-            $token = $_POST['token'];
-            $password = $_POST['password'];
-            $confirm_password = $_POST['confirm-password'];
+    if (isset($_GET['token'])) {
+        $token = $_GET['token'];
 
-            // Validate password and confirm-password match
-            if ($password !== $confirm_password) {
-                echo "Passwords do not match.";
-                exit;
-            }
+        // Fetch the email associated with the token and check for expiration (optional)
+        $sql = "SELECT * FROM passwordreset WHERE token = '$token'";
+        $result = $conn->query($sql);
 
-            // Hash the new password
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            $tokenCreationTime = strtotime($row['created_at']); // Assuming 'created_at' stores the token's creation time
+            $tokenExpiryTime = 3600; // 1 hour in seconds
 
-            // Check if the token exists and is not expired
-            $stmt = $conn->prepare("SELECT * FROM passwordreset WHERE token = ? AND expires_at > NOW()");
-            $stmt->bind_param("s", $token);
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            if ($result->num_rows > 0) {
-                // Token is valid
-                $row = $result->fetch_assoc();
-                $email = $row['email'];
-
-                // Update the user's password in the accounts table
-                $stmt = $conn->prepare("UPDATE accounts SET account_password = ? WHERE account_address = ?");
-                $stmt->bind_param("ss", $hashed_password, $email);
-                $stmt->execute();
-
-                // Delete the used token
-                $stmt = $conn->prepare("DELETE FROM passwordreset WHERE token = ?");
-                $stmt->bind_param("s", $token);
-                $stmt->execute();
-
-                echo "Password reset successful. You can now log in.";
+            if (time() - $tokenCreationTime > $tokenExpiryTime) {
+                echo "This token has expired. Please request a new one.";
             } else {
-                echo "Invalid or expired token.";
+                // If token is valid and not expired, allow password reset
+                if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                    // Check if passwords match
+                    if ($_POST['password'] !== $_POST['confirm-password']) {
+                        echo "Passwords do not match. Please try again.";
+                    } else {
+                        // Sanitize and hash the new password
+                        $newPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+                        // Update the password in the accounts table
+                        $sql = "UPDATE accounts SET account_password = '$newPassword' WHERE account_address = (SELECT email FROM passwordreset WHERE token = '$token')";
+                        if ($conn->query($sql) === TRUE) {
+                            echo "Password has been reset successfully!";
+                        } else {
+                            echo "Error updating password: " . $conn->error;
+                        }
+                    }
+                }
             }
         } else {
-            echo "Token or password is missing.";
+            echo "Invalid or expired token.";
         }
-    }
+    }   
 ?>
 </body>
 </html>
