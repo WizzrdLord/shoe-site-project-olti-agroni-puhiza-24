@@ -1,0 +1,319 @@
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Popup styling */
+.popup {
+    background-color: #fff;
+    width: 70%;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    /* Or however you want to vertically align it */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.left-section {
+    width: 50%;
+}
+
+.right-section {
+    padding: 20px;
+    width: 50%;
+}
+
+/* Top section for small images */
+.top-section {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.top-section button {
+    align-items: center;
+    /* Aligns items vertically in the center */
+    justify-content: center;
+    padding: 2px;
+    margin: 0px;
+    margin-top: 30px;
+    /* Adjust the right and left margins to reduce space between images */
+    width: 23.3%;
+    /* Increase width as needed, but ensure total width including margins does not exceed 100% */
+    height: auto;
+    aspect-ratio: 1 / 1;
+    display: inline-block;
+    background-color: #000000;
+    border-radius: 0px;
+    box-shadow: none;
+    border-color: transparent;
+}
+
+.top-section img {
+    margin-top: 0px;
+    margin-bottom: -4px;
+    margin-left: -2px;
+    margin-right: -2px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+}
+
+/* Left and Right sections */
+.content-section {
+    display: flex;
+}
+
+.left-section {
+    flex: 60%;
+    /* Takes up 1/3 of the space */
+    text-align: center;
+}
+
+.left-section img {
+    border-radius: 3px;
+    padding: 3px;
+    margin: 20px;
+    width: 87%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    background-color: #000000;
+    /* Placeholder color */
+}
+
+.right-section {
+    flex: 40%;
+    /* Takes up 2/3 of the space */
+}
+
+.product-info {
+    margin-bottom: 10px;
+}
+
+.price {
+    color: green;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.old-price {
+    margin-left: -5px;
+    color: rgba(255, 0, 0, 0.358);
+    text-decoration: line-through;
+    font-size: 15px;
+}
+
+/* Input styles */
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+select {
+    transition-duration: 0.5s;
+    border-color: black;
+    border-radius: 0px;
+    border-width: 2px;
+    width: 200px;
+    font-size: 12px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 10px;
+}
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+input[type="text"]:focus {
+    transition-duration: 0.5s;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.cascade {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    margin-right: 50px;
+    text-align: right;
+    border-radius: 10px;
+    border-width: 1px;
+    width: auto;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0px;
+}
+
+.orderButton {
+    margin-top: 10px;
+    width: 400px;
+    height: 100px;
+    padding: 10px;
+    background-color: green;
+    color: white;
+    font-size: 30px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    transition-duration: 0.5s;
+    border: green;
+    border-radius: 35px;
+    cursor: pointer;
+}
+
+.orderButton:hover {
+    transition-duration: 0.5s;
+    border-radius: 25px;
+    background-color: #000000;
+}
+
+/* Captcha placeholder */
+.captcha-placeholder {
+    width: 200px;
+    height: 60px;
+    margin-bottom: 10px;
+    background-color: #eee;
+    /* Placeholder color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.select-style {
+    margin-left: auto;
+    display: block;
+    margin-right: 50px;
+    width: 300px;
+    font-size: 13px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    line-height: 1.5;
+    color: rgb(96, 96, 96);
+    background-color: #fff;
+    background-image: linear-gradient(45deg, transparent 50%, gray 50%),
+        linear-gradient(135deg, gray 50%, transparent 50%),
+        linear-gradient(to right, #ccc, #ccc);
+    background-position: calc(100% - 20px) calc(1em + 2px),
+        calc(100% - 15px) calc(1em + 2px),
+        calc(100% - 2.5em) 0.5em;
+    background-size: 5px 5px, 5px 5px, 1px 1.5em;
+    background-repeat: no-repeat;
+    border: 1px solid #000000;
+    border-radius: 00px;
+    appearance: none;
+    /* This is important to remove default OS styling */
+    -moz-appearance: none;
+    /* For Firefox */
+    -webkit-appearance: none;
+    /* For Safari and Chrome */
+}
+
+.select-style:hover {
+    border-color: #000000;
+}
+
+.select-style:focus {
+    border-color: #aaa;
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    outline: none;
+}
+
+/* For options */
+.select-style option {
+    border-radius: 10px;
+    width: 30px;
+    padding: 5px 10px;
+}
+
+/* The hidden overlay */
+.order_overlay {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Popup */
+.order_popup {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%;
+    height: 220px;
+}
+
+/* Close Button */
+#closePopup {
+    background-color: #ff0000;
+    float: right;
+    font-size: 20px;
+    border-radius: 10px;
+    width: 100px;
+    height: 50px;
+}
+
+#closePopup:hover,
+#closePopup:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+.description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 80%;
+}
+  
+/* Media Queries for very small devices */
+@media (max-width: 400px) {
+    .top-section button {
+        width: 48%; /* Two buttons per row in very small screens */
+    }
+
+    .select-style, input[type="text"], input[type="email"], input[type="tel"] {
+        font-size: 12px; /* Adjust font size for very small devices */
+        width: 200px;
+    }
+}
+
+
+/* Hide main content on portrait mode on small devices */
+@media screen and (max-width: 600px) and (orientation: portrait) {
+    .main_div, .header_div, .left_div, .footer { /* Add other divs as needed */
+        display: none; /* Hide the content */
+    }
+
+    #rotate-device {
+        display: block; /* Show the rotation message */
+        text-align: center;
+        margin-top: 50px;
+        font-size: 24px;
+        color: white;
+        background: black;
+        padding: 20px;
+    }
+}
+
+/* Initially hide the rotate message */
+#rotate-device {
+    display: none;
+}
+
+/* Hide main content on portrait mode on small devices */
+@media screen and (max-width: 600px) and (orientation: portrait) {
+    .main_div, .header_div, .left_div, .footer { /* Add other divs as needed */
+        display: none; /* Hide the content */
+    }
+
+    #rotate-device {
+        display: block; /* Show the rotation message */
+        text-align: center;
+        margin-top: 50px;
+        font-size: 24px;
+        color: white;
+        background: black;
+        padding: 20px;
+    }
+}
+
+/* Initially hide the rotate message */
+#rotate-device {
+    display: none;
+}
