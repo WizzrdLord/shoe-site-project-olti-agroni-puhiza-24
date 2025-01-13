@@ -11,7 +11,9 @@
 
     <button class="blog-button" type="submit" id="submit">Shto Artikullin</button>
 </form>
-
+<script>
+    
+</script>
 <?php
 require 'config.php';
 

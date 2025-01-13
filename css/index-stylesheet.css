@@ -79,7 +79,7 @@ section{
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
-    transform: scaleX(-1) scale(0.75) rotate(35deg) translateY(-7rem);
+    transform: scaleX(-1) scale(0.75) rotate(35deg);
 }
 @keyframes shoe{
     0%{

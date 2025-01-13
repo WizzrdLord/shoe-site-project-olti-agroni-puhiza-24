@@ -1,4 +1,4 @@
-<form method="POST" action="" class="shoe-form">
+<form method="POST" action="" class="shoe-form" enctype="multipart/form-data">
     <input type="hidden" name="action" value="add_shoe">
 
     <div class="form-row">
@@ -16,6 +16,11 @@
     <div class="form-group">
         <label for="description">Shoe Description</label>
         <textarea id="description" name="shoe_description" placeholder="Shoe Description" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="images">Upload Images (4 images max)</label>
+        <input type="file" name="images[]" id="images" accept="image/*" multiple required>
     </div>
 
     <div class="form-row">
@@ -82,12 +87,16 @@
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // JS Discount RT Display
-        const discountInput = document.getElementById('discount');
-        const discountValue = document.getElementById('discount_value');
+        function updateDiscountDisplay() {
+            const discountInput = document.getElementById('discount');
+            const discountValue = document.getElementById('discount_value');
 
-        discountInput.addEventListener('input', function () {
-            discountValue.textContent = discountInput.value;
-        });
+            if (discountInput) {
+                discountInput.addEventListener('input', function () {
+                    discountValue.textContent = discountInput.value;
+                });
+            }
+        }
         // JS Color Display Replacement
         const c_input = document.getElementById('color');
         const c_datalist = document.getElementById('Colors');
@@ -141,4 +150,3 @@
 
     <button type="submit" class="add_shoe">Add Shoe</button>
 </form>
-<link rel="stylesheet" href="css\shoeOP.css">

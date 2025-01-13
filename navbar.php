@@ -50,7 +50,7 @@
 
             <li class="nav-item" id="theme-toggle">
                 <a href="#" class="nav-link">
-                <svg width="800px" height="800px" viewBox="-2.4 -2.4 28.80 28.80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000" transform="matrix(1, 0, 0, -1, 0, 0)rotate(90)">
+                <svg width="32px" height="32px" viewBox="-2.4 -2.4 28.80 28.80" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000" stroke="#000000" transform="matrix(1, 0, 0, -1, 0, 0)rotate(90)">
                 <path d="M12,22 C17.5228475,22 22,17.5228475 22,12 C22,6.4771525 17.5228475,2 12,2 C6.4771525,2 2,6.4771525 2,12 C2,17.5228475 6.4771525,22 12,22 Z M12,20.5 L12,3.5 C16.6944204,3.5 20.5,7.30557963 20.5,12 C20.5,16.6944204 16.6944204,20.5 12,20.5 Z" id="🎨-Color"> </path> </g> </g> </g>
                 </svg>
                 <span class="link-text">Visibility Modes</span>
