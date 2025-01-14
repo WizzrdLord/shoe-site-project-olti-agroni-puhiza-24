@@ -4,169 +4,232 @@ require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
-
-        if ($action === 'add_shoe') {
-            $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
-            $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
-            $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
-            $shoe_color = htmlspecialchars(trim($_POST['shoe_color']));
-            $shoe_material = htmlspecialchars(trim($_POST['shoe_material']));
-            $shoe_price = filter_var($_POST['shoe_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-            $shoe_gender = htmlspecialchars(trim($_POST['shoe_gender']));
-            $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
-            $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
-
-            if (
-                empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
-                empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
-                empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
-            ) {
-                die("All fields are required for adding a shoe.");
-            }
-
-            $baseDir = 'images';
-            if (!is_dir($baseDir)) {
-                mkdir($baseDir, 0755, true);
-            }
-
-            $folders = glob($baseDir . '/Prod_*', GLOB_ONLYDIR);
-            $nextFolderNumber = count($folders) + 1;
-            $productFolder = $baseDir . "/Prod_$nextFolderNumber";
-
-            if (!mkdir($productFolder, 0755, true)) {
-                echo "Failed to create folder for product images.";
-                exit;
-            }
-
-            if (isset($_FILES['images']) && is_array($_FILES['images']['error']) && count($_FILES['images']['error']) > 0) {
-                $uploadErrors = [
-                    UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
-                    UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
-                    UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
-                    UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
-                    UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
-                    UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
-                    UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
-                    UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
-                ];
-            
-                // Check for errors in each uploaded file
-                foreach ($_FILES['images']['error'] as $index => $errorCode) {
-                    if ($errorCode !== UPLOAD_ERR_OK) {
-                        $errorMessage = isset($uploadErrors[$errorCode]) ? $uploadErrors[$errorCode] : 'Unknown upload error.';
-                        echo "Error uploading image " . ($index + 1) . ": $errorMessage<br>";
+    
+        match ($action) {
+            'add_shoe' => function () use ($conn) {
+                $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
+                $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
+                $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
+                $shoe_color = htmlspecialchars(trim($_POST['shoe_color']));
+                $shoe_material = htmlspecialchars(trim($_POST['shoe_material']));
+                $shoe_price = filter_var($_POST['shoe_price'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+                $shoe_gender = htmlspecialchars(trim($_POST['shoe_gender']));
+                $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
+                $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
+    
+                if (
+                    empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
+                    empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
+                    empty($shoe_gender) || empty($shoe_discount) || empty($shoe_date_added)
+                ) {
+                    die("All fields are required for adding a shoe.");
+                }
+    
+                $baseDir = 'images';
+                if (!is_dir($baseDir)) {
+                    mkdir($baseDir, 0755, true);
+                }
+    
+                $folders = glob($baseDir . '/Prod_*', GLOB_ONLYDIR);
+                $nextFolderNumber = count($folders) + 1;
+                $productFolder = $baseDir . "/Prod_$nextFolderNumber";
+    
+                if (!mkdir($productFolder, 0755, true)) {
+                    echo "Failed to create folder for product images.";
+                    exit;
+                }
+    
+                if (isset($_FILES['images']) && is_array($_FILES['images']['error']) && count($_FILES['images']['error']) > 0) {
+                    $uploadErrors = [
+                        UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
+                        UPLOAD_ERR_INI_SIZE => 'The uploaded file exceeds the upload_max_filesize directive in php.ini.',
+                        UPLOAD_ERR_FORM_SIZE => 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.',
+                        UPLOAD_ERR_PARTIAL => 'The uploaded file was only partially uploaded.',
+                        UPLOAD_ERR_NO_FILE => 'No file was uploaded.',
+                        UPLOAD_ERR_NO_TMP_DIR => 'Missing a temporary folder.',
+                        UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+                        UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
+                    ];
+                
+                    // Check for errors in each uploaded file
+                    foreach ($_FILES['images']['error'] as $index => $errorCode) {
+                        if ($errorCode !== UPLOAD_ERR_OK) {
+                            $errorMessage = isset($uploadErrors[$errorCode]) ? $uploadErrors[$errorCode] : 'Unknown upload error.';
+                            echo "Error uploading image " . ($index + 1) . ": $errorMessage<br>";
+                            exit;
+                        }
+                    }
+                
+                    // Proceed with file processing after validation
+                    $totalFiles = count($_FILES['images']['name']);
+                    if ($totalFiles != 4) {
+                        echo "Please upload exactly 4 images.";
                         exit;
                     }
+                
+                    $imagePaths = [];
+                    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                
+                    for ($i = 0; $i < $totalFiles; $i++) {
+                        $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                        $fileName = basename($_FILES['images']['name'][$i]);
+                        $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+                
+                        if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
+                            echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
+                            exit;
+                        }
+                
+                        $newFileName = "image" . ($i + 1) . ".$fileExtension";
+                        $fileDestination = $productFolder . "/" . $newFileName;
+                
+                        // Move the file to the product folder without "images/" in the path
+                        if (move_uploaded_file($fileTmpPath, $fileDestination)) {
+                            // Store only the relative file path (without "images/" part)
+                            $imagePaths[] = "Prod_$nextFolderNumber/$newFileName";
+                        } else {
+                            echo "Failed to upload image" . ($i + 1);
+                            exit;
+                        }
+                    }
+                
+                    // Now, handle the database insert and other logic
+                    $sql = "INSERT INTO shoes (`name`, brand, `description`, image_path, image2, image3, image4, color_id, material_id, price, gender, discount, date_added)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+                    $stmt = $conn->prepare($sql);
+                    if ($stmt) {
+                        $stmt->bind_param("sssssssiidsds", $shoe_name, $shoe_brand, $shoe_description, $imagePaths[0], $imagePaths[1], $imagePaths[2], $imagePaths[3], 
+                            $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
+                
+                        if ($stmt->execute()) {
+                            echo "Shoe added successfully!";
+                        } else {
+                            error_log("Shoe Insert Error: " . $stmt->error);
+                            echo "Failed to add shoe.";
+                        }
+                        $stmt->close();
+                    } else {
+                        error_log("Shoe Preparation Error: " . $conn->error);
+                        echo "Error preparing the shoe query.";
+                    }
+                } else {
+                    echo "No files uploaded or error uploading files.";
+                    exit;
                 }
-            
-                // Proceed with file processing after validation
-                $totalFiles = count($_FILES['images']['name']);
-                if ($totalFiles != 4) {
-                    echo "Please upload exactly 4 images.";
+            },
+            'delete_shoe' => function () use ($conn) {
+                if (!isset($_POST['name']) || empty(trim($_POST['name']))) {
+                    echo "Shoe name is required to delete a shoe.";
+                    error_log("Debug: POST data received: " . print_r($_POST, true));
                     exit;
                 }
             
-                $imagePaths = [];
-                $allowedExtensions = ['jpg', 'jpeg', 'png'];
+                $shoe_name = htmlspecialchars(trim($_POST['name']));
             
-                for ($i = 0; $i < $totalFiles; $i++) {
-                    $fileTmpPath = $_FILES['images']['tmp_name'][$i];
-                    $fileName = basename($_FILES['images']['name'][$i]);
-                    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-            
-                    if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
-                        echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
-                        exit;
-                    }
-            
-                    $newFileName = "image" . ($i + 1) . ".$fileExtension";
-                    $fileDestination = $productFolder . "/" . $newFileName;
-            
-                    // Move the file to the product folder without "images/" in the path
-                    if (move_uploaded_file($fileTmpPath, $fileDestination)) {
-                        // Store only the relative file path (without "images/" part)
-                        $imagePaths[] = "Prod_$nextFolderNumber/$newFileName";
-                    } else {
-                        echo "Failed to upload image" . ($i + 1);
-                        exit;
-                    }
-                }
-            
-                // Now, handle the database insert and other logic
-                $sql = "INSERT INTO shoes (`name`, brand, `description`, image_path, image2, image3, image4, color_id, material_id, price, gender, discount, date_added)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            
+                $sql = "DELETE FROM shoes WHERE `name` = ?";
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
-                    $stmt->bind_param("sssssssiidsds", $shoe_name, $shoe_brand, $shoe_description, $imagePaths[0], $imagePaths[1], $imagePaths[2], $imagePaths[3], 
-                        $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
-            
+                    $stmt->bind_param("s", $shoe_name);
                     if ($stmt->execute()) {
-                        echo "Shoe added successfully!";
+                        echo ($stmt->affected_rows > 0) ? "Shoe deleted successfully." : "No Shoe found with the specified name.";
                     } else {
-                        error_log("Shoe Insert Error: " . $stmt->error);
-                        echo "Failed to add shoe.";
+                        error_log("Shoe Delete Error: " . $stmt->error);
+                        echo "Failed to delete shoe.";
                     }
                     $stmt->close();
                 } else {
                     error_log("Shoe Preparation Error: " . $conn->error);
-                    echo "Error preparing the shoe query.";
+                    echo "Error preparing the delete query.";
                 }
-            } else {
-                echo "No files uploaded or error uploading files.";
-                exit;
-            }
-        } elseif ($action === 'add_blog') {
-            $blog_title = htmlspecialchars(trim($_POST['blog_title']));
-            $blog_content = htmlspecialchars(trim($_POST['blog_content']));
-            $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
-
-            if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
-                echo "All fields are required for adding a blog.";
-                exit;
-            }
-
-            $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
-            $stmt = $conn->prepare($sql);
-            if ($stmt) {
-                $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
-                if ($stmt->execute()) {
-                    echo "Blog added successfully!";
+            },
+            'add_blog' => function () use ($conn) {
+                $blog_title = htmlspecialchars(trim($_POST['blog_title']));
+                $blog_content = htmlspecialchars(trim($_POST['blog_content']));
+                $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
+    
+                if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
+                    echo "All fields are required for adding a blog.";
+                    exit;
+                }
+    
+                $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
+                $stmt = $conn->prepare($sql);
+                if ($stmt) {
+                    $stmt->bind_param("sss", $blog_title, $blog_content, $blog_creation_date);
+                    if ($stmt->execute()) {
+                        echo "Blog added successfully!";
+                    } else {
+                        error_log("Blog Insert Error: " . $stmt->error);
+                        echo "Failed to add blog.";
+                    }
+                    $stmt->close();
                 } else {
-                    error_log("Blog Insert Error: " . $stmt->error);
-                    echo "Failed to add blog.";
+                    error_log("Blog Preparation Error: " . $conn->error);
+                    echo "Error preparing the blog query.";
                 }
-                $stmt->close();
-            } else {
-                error_log("Blog Preparation Error: " . $conn->error);
-                echo "Error preparing the blog query.";
-            }
-        } elseif ($action === 'delete_blog') {
-            $blog_title = htmlspecialchars(trim($_POST['blog_title']));
-
-            if (empty($blog_title)) {
-                echo "Blog title is required to delete a blog.";
-                exit;
-            }
-
-            $sql = "DELETE FROM blogs_table WHERE blog_title = ?";
-            $stmt = $conn->prepare($sql);
-            if ($stmt) {
-                $stmt->bind_param("s", $blog_title);
-                if ($stmt->execute()) {
-                    echo ($stmt->affected_rows > 0) ? "Blog deleted successfully." : "No blog found with the specified title.";
+            },
+            'delete_blog' => function () use ($conn) {
+                $blog_title = htmlspecialchars(trim($_POST['blog_title']));
+    
+                if (empty($blog_title)) {
+                    echo "Blog title is required to delete a blog.";
+                    exit;
+                }
+    
+                $sql = "DELETE FROM blogs_table WHERE blog_title = ?";
+                $stmt = $conn->prepare($sql);
+                if ($stmt) {
+                    $stmt->bind_param("s", $blog_title);
+                    if ($stmt->execute()) {
+                        echo ($stmt->affected_rows > 0) ? "Blog deleted successfully." : "No blog found with the specified title.";
+                    } else {
+                        error_log("Blog Delete Error: " . $stmt->error);
+                        echo "Failed to delete blog.";
+                    }
+                    $stmt->close();
                 } else {
-                    error_log("Blog Delete Error: " . $stmt->error);
-                    echo "Failed to delete blog.";
+                    error_log("Blog Preparation Error: " . $conn->error);
+                    echo "Error preparing the delete query.";
                 }
-                $stmt->close();
-            } else {
-                error_log("Blog Preparation Error: " . $conn->error);
-                echo "Error preparing the delete query.";
-            }
-        } else {
-            echo "Invalid action.";
-        }
+            },
+            'update_shoe' => function () use ($conn) {
+                $input = json_decode(file_get_contents('php://input'), true);  // Handle incoming JSON input
+                if (isset($input['id'])) {
+                    $shoeId = (int)$input['id'];
+                    unset($input['id']);
+                } else {
+                    echo json_encode(["success" => false, "message" => "Shoe ID is required"]);
+                    return;
+                }
+            
+                $fields = [];
+                $values = [];
+                foreach ($input as $field => $value) {
+                    $fields[] = "`$field` = ?";
+                    $values[] = $value;
+                }
+                $values[] = $shoeId;
+            
+                $sql = "UPDATE shoes SET " . implode(", ", $fields) . " WHERE id = ?";
+                $stmt = $conn->prepare($sql);
+            
+                if ($stmt) {
+                    $stmt->bind_param(str_repeat("s", count($values)), ...$values);
+                    if ($stmt->execute()) {
+                        echo json_encode(["success" => true]);
+                    } else {
+                        echo json_encode(["success" => false, "message" => $stmt->error]);
+                    }
+                    $stmt->close();
+                } else {
+                    echo json_encode(["success" => false, "message" => $conn->error]);
+                }
+            },
+            default => function () {
+                echo "Invalid action.";
+            },
+        };
     } else {
         echo "Action not specified.";
     }
@@ -179,7 +242,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/slashOp.css">
+    <link rel="stylesheet" href="css/slashOp.css?v=1.0">
     <link rel="icon" type="image/png" href="images\logo_new.png">
     <title>/op panel</title>
 </head>
@@ -271,11 +334,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
+        function saveChangesButton(){
+            document.addEventListener('DOMContentLoaded', () => {
+            const saveButtons = document.querySelectorAll('.save-button');
+
+            saveButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const shoeId = button.getAttribute('data-id');
+                    const fields = ['name', 'brand', 'color', 'material', 'price', 'discount', 'gender'];
+                    const updatedData = {};
+                
+                    fields.forEach(field => {
+                        const element = document.querySelector(`[data-id="${shoeId}"][data-field="${field}"]`);
+                        if (element) {
+                            updatedData[field] = element.innerText;
+                        }
+                    });
+                
+                    updatedData.id = shoeId;
+                
+                    fetch(window.location.href, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedData),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Changes saved successfully!');
+                        } else {
+                            alert('Error: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred while saving the changes.');
+                    });
+                });
+            });
+        });
+        }
+
         function initFormScripts() {
             updateDiscountDisplay();
             updateColorDisplay();
             updateMaterialDisplay();
             setAutoDate('date_added');
+            saveChangesButton();
         }
         // Function to change the content of the main panel
         function changeContent(content) {
@@ -292,6 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     updateMaterialDisplay();
                     updateDiscountDisplay();
                     setAutoDate("date_added");
+                    saveChangesButton();
                 })
             .catch(error => console.error('Error:', error));
         });
