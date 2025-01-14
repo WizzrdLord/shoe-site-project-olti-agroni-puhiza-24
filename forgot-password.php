@@ -71,7 +71,7 @@
                 // Server settings
                 $mail->SMTPDebug = 2;  // Enable verbose debug output
                 $mail->isSMTP();
-                $mail->Host = 'smtp.office365.com';  // Set the SMTP server
+                $mail->Host = 'smtp-mail.office365.com';  // Set the SMTP server
                 $mail->SMTPAuth = true;
                 $mail->Username = 'hat-shoes@outlook.com';  // SMTP username
                 $mail->Password = 'hatshoes123';  // SMTP password (use app password if MFA is enabled)
