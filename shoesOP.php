@@ -19,7 +19,7 @@
     </div>
 
     <div class="form-group">
-        <label for="images">Upload Images (4 images max)</label>
+        <label for="images">Upload 4 Images (800x800px)</label>
         <input type="file" name="images[]" id="images" accept="image/*" multiple required>
     </div>
 
@@ -149,4 +149,57 @@
     </script>
 
     <button type="submit" class="add_shoe">Add Shoe</button>
+</form>
+
+<?php
+require 'config.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_shoe'])) {
+    $shoe_name = htmlspecialchars(trim($_POST['name']));
+
+    if (empty($shoe_name)) {
+        die("Shoe name is required for deletion.");
+    }
+    // Debug: Ensure the blog title is being received
+    error_log("Attempting to delete shoe: " . $shoe_name);
+
+    // Delete the selected blog
+    $sql = "DELETE FROM `shoes` WHERE `name` = ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("s", $shoe_name);
+        if ($stmt->execute()) {
+            echo "Shoe deleted successfully!";
+        } else {
+            error_log("Shoe Deletion Error: " . $stmt->error);
+            echo "Failed to delete shoe.";
+        }
+        $stmt->close();
+    } else {
+        error_log("Shoe Deletion Preparation Error: " . $conn->error);
+        echo "Error preparing the deletion query.";
+    }
+    exit;
+}
+
+$sql = "SELECT `name` FROM shoes";
+$result = $conn->query($sql);
+?>
+<form class="shoe-form" method="POST" action="">
+    <input type="hidden" name="action" value="delete_shoe">
+    <p class="form-title">Select the shoe you want to delete:</p>
+    <div class="form-group">
+        <select name="shoe_name" id="name" required class="form-control">
+            <?php
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    echo "<option value=\"" . htmlspecialchars($row['name']) . "\">" . htmlspecialchars($row['name']) . "</option>";
+                }
+            } else {
+                echo "<option value=\"\">No shoes available</option>";
+            }
+            ?>
+        </select>
+    </div>
+    <button type="submit" name="delete_shoe" class="delete-shoe">Delete Shoe</button>
 </form>

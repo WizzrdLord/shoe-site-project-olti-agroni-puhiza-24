@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/slashOp.css?v=1.0">
+    <link rel="stylesheet" href="css/slashOp.css">
     <link rel="icon" type="image/png" href="images\logo_new.png">
     <title>/op panel</title>
 </head>
@@ -223,6 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             }
         }
+
         function updateMaterialDisplay() {
             const m_input = document.getElementById('material');
             const m_datalist = document.getElementById('Materials');
@@ -245,6 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             }
         }
+
         function updateDiscountDisplay() {
             const discountInput = document.getElementById('discount');
             const discountValue = document.getElementById('discount_value');
@@ -255,6 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 });
             }
         }
+
         function setAutoDate(inputId) {
             const today = new Date();
             const yyyy = today.getFullYear();
@@ -267,6 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 dateInput.value = formattedDate;
             }
         }
+
         function initFormScripts() {
             updateDiscountDisplay();
             updateColorDisplay();

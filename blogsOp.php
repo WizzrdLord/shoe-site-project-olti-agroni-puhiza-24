@@ -11,9 +11,7 @@
 
     <button class="blog-button" type="submit" id="submit">Shto Artikullin</button>
 </form>
-<script>
-    
-</script>
+
 <?php
 require 'config.php';
 
@@ -50,7 +48,7 @@ $sql = "SELECT blog_title FROM `blogs_table`";
 $result = $conn->query($sql);
 ?>
 <form class="blog-form" method="POST" action="">
-    <input type="hidden" name="action" value="delete_blog"> <!-- Add this line -->
+    <input type="hidden" name="action" value="delete_blog">
     <p>Select the blog you want to delete:</p>
     <select name="blog_title" id="blog_title" required>
         <?php
