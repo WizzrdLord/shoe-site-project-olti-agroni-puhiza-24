@@ -12,11 +12,11 @@
     <?php require "navbar.php"; ?>
 
     <div class="container">
-        <h1>Forgot Password</h1>
+<!--        <h1>Forgot Password</h1>
         <form method="post" action="">
             <input type="email" name="email" id="email" placeholder="Email" required>
             <button type="submit">Send Reset Link</button>
-        </form>
+        </form>-->
     </div>
 
     <?php
