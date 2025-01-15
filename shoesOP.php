@@ -147,30 +147,16 @@
         FROM shoes JOIN colors ON shoes.color_id = colors.id JOIN materials ON shoes.material_id = materials.id";
 
         $result = $conn->query($sql);
-?>
+        ?>
         <div class="shoe-viewer">
             <h2>Available Shoes</h2>
             <div class="shoe-grid">
                 <?php
-                $sql = " SELECT
-                        shoes.id,
-                        shoes.name,
-                        shoes.brand,
-                        shoes.description,
-                        colors.color_name,
-                        materials.material_name,
-                        shoes.price,
-                        shoes.discount,
-                        shoes.gender,
-                        shoes.date_added,
-                        shoes.image_path
-                    FROM
-                        shoes
-                    LEFT JOIN
-                        colors ON shoes.color_id = colors.id
-                    LEFT JOIN
-                        materials ON shoes.material_id = materials.id
-                ";
+                $sql = "SELECT shoes.id, shoes.name, shoes.brand, shoes.description, shoes.image_path, colors.color_name, materials.material_name, shoes.price, shoes.discount, shoes.gender, shoes.date_added
+                        FROM shoes 
+                        JOIN colors ON shoes.color_id = colors.id 
+                        JOIN materials ON shoes.material_id = materials.id";
+
                 $result = $conn->query($sql);
 
                 if ($result && $result->num_rows > 0) {
@@ -186,64 +172,62 @@
                         $discount = htmlspecialchars($row['discount']);
                         $gender = htmlspecialchars($row['gender']);
                         $dateAdded = htmlspecialchars($row['date_added']);
-                    
+
                         $fullImagePath = "images/$imagePath";
-                    
                         if (!file_exists($fullImagePath)) {
                             $fullImagePath = "images/default.png";
                         }
-                        ?>
-                        <div class="shoe-card">
-                            <div class="shoe-info">
-                                <img src="<?= $fullImagePath ?>" alt="<?= $name ?>" class="shoe-image">
-                                <div class="shoe-name-brand">
-                                    <h3 class="shoe-name" contenteditable="true" data-field="name" data-id="<?= $id ?>">
-                                        <?= $name ?>
-                                    </h3>
-                                    <p class="shoe-brand" contenteditable="true" data-field="brand" data-id="<?= $id ?>">
-                                        Brand: <?= $brand ?>
-                                    </p>
-                                </div>
-                    
-                                <p class="shoe-description">
-                                    <?= substr($description, 0, 100) ?>...
-                                    <span class="read-more" data-id="<?= $id ?>">Read More</span>
-                                </p>
-                    
-                                <div class="shoe-color-material">
-                                    <p class="shoe-color" contenteditable="true" data-field="color" data-id="<?= $id ?>">
-                                        Color: <?= $colorName ?>
-                                    </p>
-                                    <p class="shoe-material" contenteditable="true" data-field="material" data-id="<?= $id ?>">
-                                        Material: <?= $materialName ?>
-                                    </p>
-                                </div>
-
-                                <div class="shoe-price-discount">
-                                    <p class="shoe-price" contenteditable="true" data-field="price" data-id="<?= $id ?>">
-                                        Price: $<?= $price ?>
-                                    </p>
-                                    <p class="shoe-discount" contenteditable="true" data-field="discount" data-id="<?= $id ?>">
-                                        Discount: <?= $discount ?>%
-                                    </p>
-                                </div>
-                    
-                                <p class="shoe-gender" contenteditable="true" data-field="gender" data-id="<?= $id ?>">
-                                    Gender: <?= $gender ?>
-                                </p>
-                    
-                                <p class="shoe-date">
-                                    Added On: <?= $dateAdded ?>
-                                </p>
-                                <button class="save-button" name="update_shoe" data-id="<?= $id ?>">Save Changes</button>
-                            </div>
+                ?>
+                <div class="shoe-card">
+                    <div class="shoe-info">
+                        <img src="<?= $fullImagePath ?>" alt="<?= $name ?>" class="shoe-image">
+                        <div class="shoe-name-brand">
+                            <h3 class="shoe-name" contenteditable="true" data-field="name" data-id="<?= $id ?>">
+                                <?= $name ?>
+                            </h3>
+                            <p class="shoe-brand" contenteditable="true" data-field="brand" data-id="<?= $id ?>">
+                                <?= $brand ?>
+                            </p>
                         </div>
-                        <?php
+                    
+                        <p class="shoe-description" contenteditable="true" data-field="description" data-id="<?= $id ?>">
+                            <?= substr($description, 0, 100) ?>...
+                            <span class="read-more" data-id="<?= $id ?>" data-full-description="<?= $description ?>" data-expanded="false">Read More</span>
+                        </p>
+                    
+                        <div class="shoe-color-material">
+                            <p class="shoe-color" contenteditable="true" data-field="color" data-id="<?= $id ?>">
+                                Color: <?= $colorName ?>
+                            </p>
+                            <p class="shoe-material" contenteditable="true" data-field="material" data-id="<?= $id ?>">
+                                Material: <?= $materialName ?>
+                            </p>
+                        </div>
+                    
+                        <div class="shoe-price-discount">
+                            <p class="shoe-price" contenteditable="true" data-field="price" data-id="<?= $id ?>">
+                                Price: $<?= $price ?>
+                            </p>
+                            <p class="shoe-discount" contenteditable="true" data-field="discount" data-id="<?= $id ?>">
+                                Discount: <?= $discount ?>%
+                            </p>
+                        </div>
+                    
+                        <p class="shoe-gender" contenteditable="true" data-field="gender" data-id="<?= $id ?>">
+                            Gender: <?= $gender ?>
+                        </p>
+                    
+                        <p class="shoe-date">
+                            Added On: <?= $dateAdded ?>
+                        </p>
+                        <button class="save-button" name="update_shoe" data-id="<?= $id ?>">Save Changes</button>
+                    </div>
+                </div>
+                <?php
                     }
                 } else {
                     echo "<p>No shoes available to display.</p>";
                 }
-                
                 ?>
             </div>
         </div>

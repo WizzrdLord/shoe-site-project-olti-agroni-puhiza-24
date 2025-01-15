@@ -4,9 +4,10 @@ require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
-    
-        match ($action) {
-            'add_shoe' => function () use ($conn) {
+        
+        switch ($action) {
+            case 'add_shoe':
+                // Add shoe logic
                 $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
                 $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
                 $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
@@ -16,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $shoe_gender = htmlspecialchars(trim($_POST['shoe_gender']));
                 $shoe_discount = filter_var($_POST['shoe_discount'], FILTER_SANITIZE_NUMBER_INT);
                 $shoe_date_added = htmlspecialchars(trim($_POST['shoe_date_added']));
-    
+        
                 if (
                     empty($shoe_name) || empty($shoe_brand) || empty($shoe_description) ||
                     empty($shoe_color) || empty($shoe_material) || empty($shoe_price) ||
@@ -24,21 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ) {
                     die("All fields are required for adding a shoe.");
                 }
-    
+        
                 $baseDir = 'images';
                 if (!is_dir($baseDir)) {
                     mkdir($baseDir, 0755, true);
                 }
-    
+        
                 $folders = glob($baseDir . '/Prod_*', GLOB_ONLYDIR);
                 $nextFolderNumber = count($folders) + 1;
                 $productFolder = $baseDir . "/Prod_$nextFolderNumber";
-    
+        
                 if (!mkdir($productFolder, 0755, true)) {
                     echo "Failed to create folder for product images.";
                     exit;
                 }
-    
+        
                 if (isset($_FILES['images']) && is_array($_FILES['images']['error']) && count($_FILES['images']['error']) > 0) {
                     $uploadErrors = [
                         UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
                         UPLOAD_ERR_EXTENSION => 'A PHP extension stopped the file upload.',
                     ];
-                
+        
                     // Check for errors in each uploaded file
                     foreach ($_FILES['images']['error'] as $index => $errorCode) {
                         if ($errorCode !== UPLOAD_ERR_OK) {
@@ -59,49 +60,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             exit;
                         }
                     }
-                
+        
                     // Proceed with file processing after validation
                     $totalFiles = count($_FILES['images']['name']);
                     if ($totalFiles != 4) {
                         echo "Please upload exactly 4 images.";
                         exit;
                     }
-                
+        
                     $imagePaths = [];
                     $allowedExtensions = ['jpg', 'jpeg', 'png'];
-                
+        
                     for ($i = 0; $i < $totalFiles; $i++) {
                         $fileTmpPath = $_FILES['images']['tmp_name'][$i];
                         $fileName = basename($_FILES['images']['name'][$i]);
                         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-                
+        
                         if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
                             echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
                             exit;
                         }
-                
+        
                         $newFileName = "image" . ($i + 1) . ".$fileExtension";
                         $fileDestination = $productFolder . "/" . $newFileName;
-                
-                        // Move the file to the product folder without "images/" in the path
+        
                         if (move_uploaded_file($fileTmpPath, $fileDestination)) {
-                            // Store only the relative file path (without "images/" part)
                             $imagePaths[] = "Prod_$nextFolderNumber/$newFileName";
                         } else {
                             echo "Failed to upload image" . ($i + 1);
                             exit;
                         }
                     }
-                
-                    // Now, handle the database insert and other logic
+        
                     $sql = "INSERT INTO shoes (`name`, brand, `description`, image_path, image2, image3, image4, color_id, material_id, price, gender, discount, date_added)
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+        
                     $stmt = $conn->prepare($sql);
                     if ($stmt) {
                         $stmt->bind_param("sssssssiidsds", $shoe_name, $shoe_brand, $shoe_description, $imagePaths[0], $imagePaths[1], $imagePaths[2], $imagePaths[3], 
                             $shoe_color, $shoe_material, $shoe_price, $shoe_gender, $shoe_discount, $shoe_date_added);
-                
+        
                         if ($stmt->execute()) {
                             echo "Shoe added successfully!";
                         } else {
@@ -117,16 +115,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     echo "No files uploaded or error uploading files.";
                     exit;
                 }
-            },
-            'delete_shoe' => function () use ($conn) {
+                break;
+        
+            case 'delete_shoe':
+                // Delete shoe logic
                 if (!isset($_POST['name']) || empty(trim($_POST['name']))) {
                     echo "Shoe name is required to delete a shoe.";
                     error_log("Debug: POST data received: " . print_r($_POST, true));
                     exit;
                 }
-            
+        
                 $shoe_name = htmlspecialchars(trim($_POST['name']));
-            
+        
                 $sql = "DELETE FROM shoes WHERE `name` = ?";
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
@@ -142,17 +142,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     error_log("Shoe Preparation Error: " . $conn->error);
                     echo "Error preparing the delete query.";
                 }
-            },
-            'add_blog' => function () use ($conn) {
+                break;
+        
+            case 'add_blog':
+                // Add blog logic
                 $blog_title = htmlspecialchars(trim($_POST['blog_title']));
                 $blog_content = htmlspecialchars(trim($_POST['blog_content']));
                 $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
-    
+        
                 if (empty($blog_title) || empty($blog_content) || empty($blog_creation_date)) {
                     echo "All fields are required for adding a blog.";
                     exit;
                 }
-    
+        
                 $sql = "INSERT INTO blogs_table (blog_title, blog_content, blog_creation_date) VALUES (?, ?, ?)";
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
@@ -168,15 +170,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     error_log("Blog Preparation Error: " . $conn->error);
                     echo "Error preparing the blog query.";
                 }
-            },
-            'delete_blog' => function () use ($conn) {
+                break;
+        
+            case 'delete_blog':
+                // Delete blog logic
                 $blog_title = htmlspecialchars(trim($_POST['blog_title']));
-    
+        
                 if (empty($blog_title)) {
                     echo "Blog title is required to delete a blog.";
                     exit;
                 }
-    
+        
                 $sql = "DELETE FROM blogs_table WHERE blog_title = ?";
                 $stmt = $conn->prepare($sql);
                 if ($stmt) {
@@ -192,44 +196,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     error_log("Blog Preparation Error: " . $conn->error);
                     echo "Error preparing the delete query.";
                 }
-            },
-            'update_shoe' => function () use ($conn) {
-                $input = json_decode(file_get_contents('php://input'), true);  // Handle incoming JSON input
-                if (isset($input['id'])) {
-                    $shoeId = (int)$input['id'];
-                    unset($input['id']);
-                } else {
-                    echo json_encode(["success" => false, "message" => "Shoe ID is required"]);
-                    return;
+                break;
+        
+            case 'update_shoe':
+                if (!isset($_POST['id']) || empty($_POST['id'])) {
+                    echo "Shoe ID is required to update a shoe.";
+                    exit;
                 }
-            
-                $fields = [];
+
+                $shoeId = (int)$_POST['id']; // Ensure it's an integer (ID should always be an integer)
+
+                $updatedFields = [];
                 $values = [];
-                foreach ($input as $field => $value) {
-                    $fields[] = "`$field` = ?";
-                    $values[] = $value;
+
+                // List of fields that might be updated
+                $fields = ['name', 'brand', 'description', 'color', 'material', 'price', 'discount', 'gender'];
+
+                // Loop through fields to check for updates
+                foreach ($fields as $field) {
+                    if (isset($_POST[$field]) && !empty($_POST[$field])) {
+                        $updatedFields[] = "`$field` = ?";
+                        $values[] = htmlspecialchars(trim($_POST[$field])); // Sanitize and trim input
+                    }
                 }
+
+                // If no fields are updated, show a message
+                if (empty($updatedFields)) {
+                    echo "You need to make changes in order to update a shoe.";
+                    exit; // Stop execution if no fields are updated
+                }
+
+                // Add the shoe ID at the end (for WHERE clause)
                 $values[] = $shoeId;
-            
-                $sql = "UPDATE shoes SET " . implode(", ", $fields) . " WHERE id = ?";
-                $stmt = $conn->prepare($sql);
-            
-                if ($stmt) {
-                    $stmt->bind_param(str_repeat("s", count($values)), ...$values);
+
+                // Prepare the SQL query
+                $sql = "UPDATE shoes SET " . implode(", ", $updatedFields) . " WHERE id = ?";
+
+                // Prepare and execute the SQL statement
+                if ($stmt = $conn->prepare($sql)) {
+                    // Bind the parameters to the prepared statement
+                    $stmt->bind_param(str_repeat("s", count($values) - 1) . "i", ...$values); // Binding string for fields and integer for shoeId
+
+                    // Execute the query
                     if ($stmt->execute()) {
-                        echo json_encode(["success" => true]);
+                        echo "Shoe updated successfully!";
                     } else {
-                        echo json_encode(["success" => false, "message" => $stmt->error]);
+                        echo "Error executing update: " . $stmt->error;
                     }
                     $stmt->close();
                 } else {
-                    echo json_encode(["success" => false, "message" => $conn->error]);
+                    echo "Error preparing query: " . $conn->error;
                 }
-            },
-            default => function () {
+                break;
+                        
+            default:
                 echo "Invalid action.";
-            },
-        };
+                break;
+        }        
     } else {
         echo "Action not specified.";
     }
@@ -242,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/slashOp.css?v=1.0">
+    <link rel="stylesheet" href="css/slashOp.css">
     <link rel="icon" type="image/png" href="images\logo_new.png">
     <title>/op panel</title>
 </head>
@@ -334,47 +357,84 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        function saveChangesButton(){
-            document.addEventListener('DOMContentLoaded', () => {
-            const saveButtons = document.querySelectorAll('.save-button');
-
-            saveButtons.forEach(button => {
-                button.addEventListener('click', () => {
+        function saveChangesButton() {
+            document.addEventListener('click', event => {
+                if (event.target.classList.contains('save-button')) {
+                    const button = event.target;
                     const shoeId = button.getAttribute('data-id');
-                    const fields = ['name', 'brand', 'color', 'material', 'price', 'discount', 'gender'];
+                
+                    const fields = ['name', 'brand', 'description', 'color_id', 'material_id', 'price', 'discount', 'gender'];
                     const updatedData = {};
+                    let hasChanges = false;
                 
                     fields.forEach(field => {
                         const element = document.querySelector(`[data-id="${shoeId}"][data-field="${field}"]`);
                         if (element) {
-                            updatedData[field] = element.innerText;
+                            const fieldValue = element.innerText.trim();
+                            if (fieldValue !== "") { // If the field is updated
+                                updatedData[field] = fieldValue;
+                                hasChanges = true;
+                            }
                         }
                     });
                 
+                    if (!hasChanges) {
+                        alert("You need to make changes in order to update a shoe.");
+                        return; // Prevent form submission
+                    }
+                
                     updatedData.id = shoeId;
+                    updatedData.action = 'update_shoe'; // Add action type
+
+                    const formData = new FormData();
+                    for (const field in updatedData) {
+                        if (updatedData.hasOwnProperty(field)) {
+                            formData.append(field, updatedData[field]);
+                        }
+                    }
                 
                     fetch(window.location.href, {
                         method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(updatedData),
+                        body: formData, // Send data to PHP
                     })
-                    .then(response => response.json())
+                    .then(response => response.text()) // Get server response
                     .then(data => {
-                        if (data.success) {
+                        console.log("Server Response:", data);
+                        if (data.includes("Shoe updated successfully!")) {
                             alert('Changes saved successfully!');
                         } else {
-                            alert('Error: ' + data.message);
+                            alert('Error: ' + data);
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
                         alert('An error occurred while saving the changes.');
                     });
-                });
+                }
             });
-        });
+        }
+        function readMoreButton() {
+            document.addEventListener("click", (event) => {
+                const button = event.target.closest(".read-more");
+                if (!button) return;
+
+                const shoeCard = button.closest(".shoe-card");
+                const descriptionElement = shoeCard.querySelector(".shoe-description");
+                const fullDescription = button.dataset.fullDescription;
+                const isExpanded = button.dataset.expanded === "true";
+            
+                if (isExpanded) {
+                    descriptionElement.innerHTML = `
+                        ${fullDescription.substring(0, 100)}...
+                        <span class="read-more" data-id="${button.dataset.id}" data-full-description="${fullDescription}" data-expanded="false">Read More</span>
+                    `;
+                } else {
+                    descriptionElement.innerHTML = `
+                        ${fullDescription}
+                        <span class="read-more" data-id="${button.dataset.id}" data-full-description="${fullDescription}" data-expanded="true">Show Less</span>
+                    `;
+                }
+            });
         }
 
         function initFormScripts() {
@@ -383,6 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             updateMaterialDisplay();
             setAutoDate('date_added');
             saveChangesButton();
+            readMoreButton();
         }
         // Function to change the content of the main panel
         function changeContent(content) {
@@ -400,6 +461,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     updateDiscountDisplay();
                     setAutoDate("date_added");
                     saveChangesButton();
+                    readMoreButton();
                 })
             .catch(error => console.error('Error:', error));
         });
@@ -445,8 +507,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             })
             .catch(error => console.error('Error:', error));
         });
-        initFormScripts();
+        
+        document.addEventListener('DOMContentLoaded', initFormScripts);
     </script>
-    <script src="js\shoesOP.js"></script>
 </body>
 </html>
