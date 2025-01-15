@@ -185,38 +185,43 @@
                             <h3 class="shoe-name" contenteditable="true" data-field="name" data-id="<?= $id ?>">
                                 <?= $name ?>
                             </h3>
-                            <p class="shoe-brand" contenteditable="true" data-field="brand" data-id="<?= $id ?>">
+                            <label for="brand-<?= $id ?>">Brand:</label>
+                            <p id="brand-<?= $id ?>" class="shoe-brand" contenteditable="true" data-field="brand" data-id="<?= $id ?>">
                                 <?= $brand ?>
                             </p>
                         </div>
-                    
+
                         <p class="shoe-description" contenteditable="true" data-field="description" data-id="<?= $id ?>">
                             <?= substr($description, 0, 100) ?>...
                             <span class="read-more" data-id="<?= $id ?>" data-full-description="<?= $description ?>" data-expanded="false">Read More</span>
                         </p>
-                    
+
                         <div class="shoe-color-material">
-                            <p class="shoe-color" contenteditable="true" data-field="color" data-id="<?= $id ?>">
-                                Color: <?= $colorName ?>
+                            <label for="color-<?= $id ?>">Color:</label>
+                            <p id="color-<?= $id ?>" class="shoe-color" contenteditable="true" data-field="color" data-id="<?= $id ?>">
+                                <?= $colorName ?>
                             </p>
-                            <p class="shoe-material" contenteditable="true" data-field="material" data-id="<?= $id ?>">
-                                Material: <?= $materialName ?>
+                            <label for="material-<?= $id ?>">Material:</label>
+                            <p id="material-<?= $id ?>" class="shoe-material" contenteditable="true" data-field="material" data-id="<?= $id ?>">
+                                <?= $materialName ?>
                             </p>
                         </div>
-                    
+
                         <div class="shoe-price-discount">
-                            <p class="shoe-price" contenteditable="true" data-field="price" data-id="<?= $id ?>">
-                                Price: $<?= $price ?>
+                            <label for="price-<?= $id ?>">Price:</label>
+                            <p id="price-<?= $id ?>" class="shoe-price" contenteditable="true" data-field="price" data-id="<?= $id ?>">
+                                <?= $price ?>
                             </p>
-                            <p class="shoe-discount" contenteditable="true" data-field="discount" data-id="<?= $id ?>">
-                                Discount: <?= $discount ?>%
+                            <label for="discount-<?= $id ?>">Discount:</label>
+                            <p id="discount-<?= $id ?>" class="shoe-discount" contenteditable="true" data-field="discount" data-id="<?= $id ?>">
+                                <?= $discount ?>
                             </p>
                         </div>
-                    
+
                         <p class="shoe-gender" contenteditable="true" data-field="gender" data-id="<?= $id ?>">
-                            Gender: <?= $gender ?>
+                            <?= $gender ?>
                         </p>
-                    
+
                         <p class="shoe-date">
                             Added On: <?= $dateAdded ?>
                         </p>
