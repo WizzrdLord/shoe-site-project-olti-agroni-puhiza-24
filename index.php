@@ -206,7 +206,7 @@
                     <div class="content">
                         <h3><?php echo htmlspecialchars($shoe['name']); ?></h3>
                         <p>
-                            <?php echo htmlspecialchars($shoe['description']); ?>
+                            <?php echo htmlspecialchars_decode($shoe['description']); ?>
                         </p>
                         <div class="price">
                             <?php

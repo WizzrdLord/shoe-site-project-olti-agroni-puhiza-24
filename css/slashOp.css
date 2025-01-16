@@ -365,6 +365,36 @@ body::-webkit-scrollbar-thumb {
   margin-left:20px;
 }
 
+.shoe-color-material {
+  display: flex; 
+  gap: .5rem; 
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.shoe-color, .shoe-material {
+  flex: 1; 
+  padding: 4px;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  color: #555;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+  position: relative; 
+}
+
+.shoe-color:focus, .shoe-material:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.shoe-color-material label {
+  font-size: 1rem;
+  color: #333;
+  display: inline-block;
+}
+
 @media (max-width:768px){
   .form-group{
     flex:1 1 100%;
@@ -394,7 +424,6 @@ body::-webkit-scrollbar-thumb {
     margin-left:0;
   }
 }
-
 
 /*Blog Editing CSS*/
 .blog-form {

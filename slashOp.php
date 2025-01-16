@@ -143,9 +143,88 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     echo "Error preparing the delete query.";
                 }
                 break;
-        
+
+            case 'update_shoe':
+                if (!isset($_POST['id']) || empty($_POST['id'])) {
+                    echo "Shoe ID is required to update a shoe.";
+                    exit;
+                }
+            
+                $shoeId = (int)$_POST['id'];
+                
+                // Debugging: Check if shoeId is received correctly
+                echo "Received shoe ID: $shoeId<br>";
+            
+                $updatedFields = [];
+                $values = [];
+
+                $fields = ['name', 'brand', 'description', 'color_id', 'material_id', 'price', 'discount', 'gender'];
+
+                foreach ($fields as $field) {
+                    if (isset($_POST[$field]) && $_POST[$field] !== '') {
+                        if ($field === 'color_id' || $field === 'material_id') {
+                            if (is_numeric($_POST[$field])) {
+                                $updatedFields[] = "`$field` = ?";
+                                $values[] = (int)$_POST[$field];  // Ensure integer
+                            } else {
+                                echo ucfirst($field) . " must be a valid numeric value.";
+                                exit;
+                            }
+                        } elseif ($field === 'price' || $field === 'discount') {
+                            if (is_numeric($_POST[$field])) {
+                                $updatedFields[] = "`$field` = ?";
+                                $values[] = (float)$_POST[$field];  // Ensure float for price and discount
+                            } else {
+                                echo ucfirst($field) . " must be a valid number.";
+                                exit;
+                            }
+                        } elseif ($field === 'description') {
+                            $updatedFields[] = "`$field` = ?";
+                            $values[] = htmlspecialchars(trim(htmlspecialchars_decode($_POST[$field])));
+                        } else {
+                            $updatedFields[] = "`$field` = ?";
+                            $values[] = htmlspecialchars(trim($_POST[$field]));
+                        }
+                    }
+                }
+
+                if (empty($updatedFields)) {
+                    echo "You need to make changes in order to update a shoe.";
+                    exit;
+                }
+
+                // Prepare and execute the update query
+                $values[] = $shoeId;
+                $sql = "UPDATE shoes SET " . implode(", ", $updatedFields) . " WHERE id = ?";
+                
+                // Debugging: Check the query and values
+                echo "SQL Query: " . $sql . "<br>";
+                echo "Values: " . implode(", ", $values) . "<br>";
+            
+                if ($stmt = $conn->prepare($sql)) {
+                    $paramTypes = '';
+                    foreach ($values as $value) {
+                        $paramTypes .= is_int($value) ? 'i' : 's';
+                    }
+            
+                    $stmt->bind_param($paramTypes, ...$values);
+            
+                    if ($stmt->execute()) {
+                        if ($stmt->affected_rows > 0) {
+                            echo "Shoe updated successfully!";
+                        } else {
+                            echo "No changes were made to the shoe.";
+                        }
+                    } else {
+                        echo "Error executing update: " . $stmt->error;
+                    }
+                    $stmt->close();
+                } else {
+                    echo "Error preparing query: " . $conn->error;
+                }
+                break;
+                
             case 'add_blog':
-                // Add blog logic
                 $blog_title = htmlspecialchars(trim($_POST['blog_title']));
                 $blog_content = htmlspecialchars(trim($_POST['blog_content']));
                 $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
@@ -198,56 +277,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
                 break;
         
-            case 'update_shoe':
-                if (!isset($_POST['id']) || empty($_POST['id'])) {
-                    echo "Shoe ID is required to update a shoe.";
-                    exit;
-                }
-
-                $shoeId = (int)$_POST['id']; // Ensure it's an integer (ID should always be an integer)
-
-                $updatedFields = [];
-                $values = [];
-
-                // List of fields that might be updated
-                $fields = ['name', 'brand', 'description', 'color', 'material', 'price', 'discount', 'gender'];
-
-                // Loop through fields to check for updates
-                foreach ($fields as $field) {
-                    if (isset($_POST[$field]) && !empty($_POST[$field])) {
-                        $updatedFields[] = "`$field` = ?";
-                        $values[] = htmlspecialchars(trim($_POST[$field])); // Sanitize and trim input
-                    }
-                }
-
-                // If no fields are updated, show a message
-                if (empty($updatedFields)) {
-                    echo "You need to make changes in order to update a shoe.";
-                    exit; // Stop execution if no fields are updated
-                }
-
-                // Add the shoe ID at the end (for WHERE clause)
-                $values[] = $shoeId;
-
-                // Prepare the SQL query
-                $sql = "UPDATE shoes SET " . implode(", ", $updatedFields) . " WHERE id = ?";
-
-                // Prepare and execute the SQL statement
-                if ($stmt = $conn->prepare($sql)) {
-                    // Bind the parameters to the prepared statement
-                    $stmt->bind_param(str_repeat("s", count($values) - 1) . "i", ...$values); // Binding string for fields and integer for shoeId
-
-                    // Execute the query
-                    if ($stmt->execute()) {
-                        echo "Shoe updated successfully!";
-                    } else {
-                        echo "Error executing update: " . $stmt->error;
-                    }
-                    $stmt->close();
-                } else {
-                    echo "Error preparing query: " . $conn->error;
-                }
-                break;
                         
             default:
                 echo "Invalid action.";
@@ -265,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/slashOp.css">
+    <link rel="stylesheet" href="css/slashOp.css?v=1.0">
     <link rel="icon" type="image/png" href="images\logo_new.png">
     <title>/op panel</title>
 </head>
@@ -358,7 +387,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         function saveChangesButton() {
-            document.addEventListener('click', event => {
+            document.addEventListener("click", (event) => {
                 if (event.target.classList.contains('save-button')) {
                     const button = event.target;
                     const shoeId = button.getAttribute('data-id');
@@ -370,8 +399,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     fields.forEach(field => {
                         const element = document.querySelector(`[data-id="${shoeId}"][data-field="${field}"]`);
                         if (element) {
-                            const fieldValue = element.innerText.trim();
-                            if (fieldValue !== "") { // If the field is updated
+                            let fieldValue = "";
+                            if (field === 'description') {
+                                fieldValue = element.querySelector('.full-description').innerText.trim();
+                            } else if (field === 'color_id' || field === 'material_id') {
+                                fieldValue = element.value.trim();
+                            } else {
+                                fieldValue = element.innerText.trim();
+                            }
+                        
+                            if (fieldValue !== "") {
                                 updatedData[field] = fieldValue;
                                 hasChanges = true;
                             }
@@ -380,12 +417,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                     if (!hasChanges) {
                         alert("You need to make changes in order to update a shoe.");
-                        return; // Prevent form submission
+                        return;
                     }
                 
                     updatedData.id = shoeId;
-                    updatedData.action = 'update_shoe'; // Add action type
-
+                    updatedData.action = 'update_shoe';
+                
                     const formData = new FormData();
                     for (const field in updatedData) {
                         if (updatedData.hasOwnProperty(field)) {
@@ -395,9 +432,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                     fetch(window.location.href, {
                         method: 'POST',
-                        body: formData, // Send data to PHP
+                        body: formData,
                     })
-                    .then(response => response.text()) // Get server response
+                    .then(response => response.text())
                     .then(data => {
                         console.log("Server Response:", data);
                         if (data.includes("Shoe updated successfully!")) {
@@ -413,26 +450,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
             });
         }
+
         function readMoreButton() {
             document.addEventListener("click", (event) => {
                 const button = event.target.closest(".read-more");
                 if (!button) return;
-
-                const shoeCard = button.closest(".shoe-card");
-                const descriptionElement = shoeCard.querySelector(".shoe-description");
-                const fullDescription = button.dataset.fullDescription;
+            
+                const descriptionElement = button.closest(".shoe-description");
+                const shortDescription = descriptionElement.querySelector(".short-description");
+                const fullDescription = descriptionElement.querySelector(".full-description");
                 const isExpanded = button.dataset.expanded === "true";
             
                 if (isExpanded) {
-                    descriptionElement.innerHTML = `
-                        ${fullDescription.substring(0, 100)}...
-                        <span class="read-more" data-id="${button.dataset.id}" data-full-description="${fullDescription}" data-expanded="false">Read More</span>
-                    `;
+                    // Collapse to show only the short description
+                    shortDescription.style.display = "inline";
+                    fullDescription.style.display = "none";
+                    button.textContent = "Read More";
+                    button.dataset.expanded = "false";
                 } else {
-                    descriptionElement.innerHTML = `
-                        ${fullDescription}
-                        <span class="read-more" data-id="${button.dataset.id}" data-full-description="${fullDescription}" data-expanded="true">Show Less</span>
-                    `;
+                    // Expand to show the full description
+                    shortDescription.style.display = "none";
+                    fullDescription.style.display = "inline";
+                    button.textContent = "Show Less";
+                    button.dataset.expanded = "true";
                 }
             });
         }
