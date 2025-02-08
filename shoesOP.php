@@ -3,6 +3,8 @@
         <!--Add Shoe-->
         <form method="POST" action="" class="shoe-form" enctype="multipart/form-data">
             <input type="hidden" name="action" value="add_shoe">
+
+            <!--Name & Brand Input-->
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Shoe Name</label>
@@ -15,16 +17,19 @@
                 </div>
             </div>
 
+            <!--Description-->
             <div class="form-group">
                 <label for="description">Shoe Description</label>
                 <textarea id="description" name="shoe_description" placeholder="Shoe Description" required></textarea>
             </div>
 
+            <!--Image Upload-->
             <div class="form-group">
                 <label for="images">Upload 4 Images (800x800px)</label>
                 <input type="file" name="images[]" id="images" accept="image/*" multiple required>
             </div>
 
+            <!--Color & Material Input-->
             <div class="form-row">
                 <div class="form-group">
                     <label for="color">Color</label>
@@ -63,7 +68,8 @@
                     <input type="hidden" id="material_value" name="shoe_material" required>
                 </div>
             </div>
-
+            
+            <!--Price & Gender Input-->
             <div class="form-row">
                 <div class="form-group">
                     <label for="price">Price</label>
@@ -75,18 +81,21 @@
                     <input id="gender" name="shoe_gender" placeholder="🚁">
                 </div>
             </div>
-
+            
+            <!--Discount-->
             <div class="form-group">
                 <label for="discount">Discount: <span id="discount_value">0</span>%</label>
                 <input type="range" value="0.00" step="5.00" id="discount" name="shoe_discount" min="0" max="100" required>
             </div>
-
+            
+            <!--Date-->
             <div class="form-group">
                 <label for="date_added">Date</label>
                 <input id="date_added" name="shoe_date_added" type="date" required>
             </div>
             <button type="submit" class="add_shoe">Add Shoe</button>
         </form>
+
         <!--Delete Shoe-->
         <?php
             require 'config.php';
@@ -126,8 +135,10 @@
             <div class="form-group">
                 <select name="name" id="name" required class="form-control">
                     <?php
+                    // Check for shoes in db
                     if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
+                            // Output each shoe name in options
                             echo "<option value=\"" . htmlspecialchars($row['name']) . "\">" . htmlspecialchars($row['name']) . "</option>";
                         }
                     } else {
@@ -142,12 +153,6 @@
 
     <div class="right-column">
         <!--View Shoes & Edit-->
-        <?php
-        $sql = "SELECT shoes.id, shoes.name, shoes.brand, shoes.description, shoes.image_path, colors.color_name, materials.material_name, shoes.price, shoes.discount, shoes.gender, shoes.date_added
-        FROM shoes JOIN colors ON shoes.color_id = colors.id JOIN materials ON shoes.material_id = materials.id";
-
-        $result = $conn->query($sql);
-        ?>
         <div class="shoe-viewer">
             <h2>Available Shoes</h2>
             <div class="shoe-grid">
@@ -182,7 +187,10 @@
                 ?>
                 <div class="shoe-card">
                     <div class="shoe-info">
+                        <!--Image-->
                         <img src="<?= $fullImagePath ?>" alt="<?= $name ?>" class="shoe-image">
+                        
+                        <!--Name & Brand Edit-->
                         <div class="shoe-name-brand">
                             <h3 class="shoe-name" contenteditable="true" data-field="name" data-id="<?= $id ?>">
                                 <?= $name ?>
@@ -192,17 +200,20 @@
                                 <?= $brand ?>
                             </p>
                         </div>
-                    
+                        
+                        <!--Description Edit-->
                         <p class="shoe-description" contenteditable="true" data-field="description" data-id="<?= $id ?>" data-description="<?= htmlspecialchars($description, ENT_QUOTES) ?>">
                             <span class="short-description">
                                 <?= htmlspecialchars_decode(substr($description, 0, 100)) ?>...
                             </span>
+                            
                             <span class="full-description" style="display: none;">
                                 <?= htmlspecialchars_decode($description) ?>
                             </span>
                             <span class="read-more" data-id="<?= $id ?>" data-expanded="false">Read More</span>
                         </p>
-                    
+
+                        <!--Color & Material Edit-->
                         <div class="shoe-color-material">
                             <label for="color-<?= $id ?>">Color:</label>
                             <select id="color-<?= $id ?>" class="shoe-color" data-field="color_id" data-id="<?= $id ?>" name="color_id">
@@ -233,7 +244,8 @@
                                 <option value="8" <?= ($materialId == 8) ? 'selected' : '' ?>>Rubber</option>
                             </select>
                         </div>
-                    
+
+                        <!--Price & Discount Edit-->
                         <div class="shoe-price-discount">
                             <label for="price-<?= $id ?>">Price:</label>
                             <p id="price-<?= $id ?>" class="shoe-price" contenteditable="true" data-field="price" data-id="<?= $id ?>">
@@ -244,11 +256,13 @@
                                 <?= $discount ?>
                             </p>
                         </div>
-                    
+
+                        <!--Gender Edit-->
                         <p class="shoe-gender" contenteditable="true" data-field="gender" data-id="<?= $id ?>">
                             <?= $gender ?>
                         </p>
-                    
+                        
+                        <!--Date-->
                         <p class="shoe-date">
                             Added On: <?= $dateAdded ?>
                         </p>

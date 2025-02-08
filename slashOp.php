@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         switch ($action) {
             case 'add_shoe':
-                // Add shoe logic
+                // Read and clean
                 $shoe_name = htmlspecialchars(trim($_POST['shoe_name']));
                 $shoe_brand = htmlspecialchars(trim($_POST['shoe_brand']));
                 $shoe_description = htmlspecialchars(trim($_POST['shoe_description']));
@@ -25,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ) {
                     die("All fields are required for adding a shoe.");
                 }
-        
+
+                // Folder Creation, Naming & Placement
                 $baseDir = 'images';
                 if (!is_dir($baseDir)) {
                     mkdir($baseDir, 0755, true);
@@ -39,7 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     echo "Failed to create folder for product images.";
                     exit;
                 }
-        
+
+                // Readable Error's. Havent seen yet, hopefully we never have to see these
                 if (isset($_FILES['images']) && is_array($_FILES['images']['error']) && count($_FILES['images']['error']) > 0) {
                     $uploadErrors = [
                         UPLOAD_ERR_OK => 'There is no error, the file uploaded with success.',
@@ -61,29 +63,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                     }
         
-                    // Proceed with file processing after validation
+                    // Proceed with file processing after validation and count number of uploaded images
                     $totalFiles = count($_FILES['images']['name']);
                     if ($totalFiles != 4) {
                         echo "Please upload exactly 4 images.";
                         exit;
                     }
-        
+                    
+                    // Store image paths
                     $imagePaths = [];
                     $allowedExtensions = ['jpg', 'jpeg', 'png'];
         
                     for ($i = 0; $i < $totalFiles; $i++) {
+                        // Temp file path for uploads
                         $fileTmpPath = $_FILES['images']['tmp_name'][$i];
+                        // Get file name
                         $fileName = basename($_FILES['images']['name'][$i]);
+                        // Get file extension
                         $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-        
+                        
+                        // Allowed extension check
                         if (!in_array(strtolower($fileExtension), $allowedExtensions)) {
                             echo "Invalid file type for image " . ($i + 1) . ". Allowed types are: " . implode(", ", $allowedExtensions);
                             exit;
                         }
-        
+            
                         $newFileName = "image" . ($i + 1) . ".$fileExtension";
                         $fileDestination = $productFolder . "/" . $newFileName;
-        
+                        
                         if (move_uploaded_file($fileTmpPath, $fileDestination)) {
                             $imagePaths[] = "Prod_$nextFolderNumber/$newFileName";
                         } else {
@@ -118,13 +125,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
         
             case 'delete_shoe':
-                // Delete shoe logic
+                // Empty name check
                 if (!isset($_POST['name']) || empty(trim($_POST['name']))) {
                     echo "Shoe name is required to delete a shoe.";
                     error_log("Debug: POST data received: " . print_r($_POST, true));
                     exit;
                 }
-        
+                
+                // Sanitize input
                 $shoe_name = htmlspecialchars(trim($_POST['name']));
         
                 $sql = "DELETE FROM shoes WHERE `name` = ?";
@@ -132,6 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($stmt) {
                     $stmt->bind_param("s", $shoe_name);
                     if ($stmt->execute()) {
+                        // Affected row check
                         echo ($stmt->affected_rows > 0) ? "Shoe deleted successfully." : "No Shoe found with the specified name.";
                     } else {
                         error_log("Shoe Delete Error: " . $stmt->error);
@@ -145,16 +154,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
 
             case 'update_shoe':
+                // Empty ID check
                 if (!isset($_POST['id']) || empty($_POST['id'])) {
                     echo "Shoe ID is required to update a shoe.";
                     exit;
                 }
-            
+
                 $shoeId = (int)$_POST['id'];
                 
-                // Debugging: Check if shoeId is received correctly
+                // Debugging: Check if shoeId is received correctly (Remove Later)
                 echo "Received shoe ID: $shoeId<br>";
-            
+                
+                // Store changes
                 $updatedFields = [];
                 $values = [];
 
@@ -173,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         } elseif ($field === 'price' || $field === 'discount') {
                             if (is_numeric($_POST[$field])) {
                                 $updatedFields[] = "`$field` = ?";
-                                $values[] = (float)$_POST[$field];  // Ensure float for price and discount
+                                $values[] = (float)$_POST[$field];  // Ensure float
                             } else {
                                 echo ucfirst($field) . " must be a valid number.";
                                 exit;
@@ -193,15 +204,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     exit;
                 }
 
-                // Prepare and execute the update query
+                // Make ID parameter for WHERE
                 $values[] = $shoeId;
+                // Dynamic SQL field update
                 $sql = "UPDATE shoes SET " . implode(", ", $updatedFields) . " WHERE id = ?";
                 
-                // Debugging: Check the query and values
+                // Debugging: Check the query and values (Remove Later)
                 echo "SQL Query: " . $sql . "<br>";
                 echo "Values: " . implode(", ", $values) . "<br>";
             
                 if ($stmt = $conn->prepare($sql)) {
+                    // Check parameter type dynamically
                     $paramTypes = '';
                     foreach ($values as $value) {
                         $paramTypes .= is_int($value) ? 'i' : 's';
@@ -225,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
                 
             case 'add_blog':
+                // Read and clean
                 $blog_title = htmlspecialchars(trim($_POST['blog_title']));
                 $blog_content = htmlspecialchars(trim($_POST['blog_content']));
                 $blog_creation_date = htmlspecialchars(trim($_POST['blog_creation_date']));
@@ -252,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 break;
         
             case 'delete_blog':
-                // Delete blog logic
+                // Read and clean user input
                 $blog_title = htmlspecialchars(trim($_POST['blog_title']));
         
                 if (empty($blog_title)) {
@@ -276,8 +290,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     echo "Error preparing the delete query.";
                 }
                 break;
-        
-                        
+             
             default:
                 echo "Invalid action.";
                 break;
@@ -287,7 +300,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -316,20 +328,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </main>
 
     <script>
+    // Admin panel scripts
         function updateColorDisplay() {
-            const c_input = document.getElementById('color');
-            const c_datalist = document.getElementById('Colors');
+            const c_input = document.getElementById('color'); // User input
+            const c_datalist = document.getElementById('Colors'); //
             const c_hiddenInput = document.getElementById('color_value');
 
+            // Existing input check
             if (c_input) {
-                c_input.addEventListener('input', function () {
+                c_input.addEventListener('input', function () { // User input trigger
                     const options = c_datalist.querySelectorAll('option');
-                    const inputValue = c_input.value;
-                    let matched = false;
+                    const inputValue = c_input.value; // Current input value
+                    let matched = false; // Flag for match tracking
                     options.forEach(option => {
                         if (option.value === inputValue) {
                             c_hiddenInput.value = option.getAttribute('data-value');
-                            matched = true;
+                            matched = true; // Flag true for match
                         }
                     });
                     if (!matched) {
@@ -340,19 +354,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         function updateMaterialDisplay() {
-            const m_input = document.getElementById('material');
+            const m_input = document.getElementById('material'); // User input
             const m_datalist = document.getElementById('Materials');
             const m_hiddenInput = document.getElementById('material_value');
 
+            // Existing input check
             if (m_input) {
-                m_input.addEventListener('input', function () {
+                m_input.addEventListener('input', function () { // User input trigger
                     const options = m_datalist.querySelectorAll('option');
-                    const inputValue = m_input.value;
-                    let matched = false;
+                    const inputValue = m_input.value; // Current input value
+                    let matched = false; // Flag for match tracking
                     options.forEach(option => {
                         if (option.value === inputValue) {
                             m_hiddenInput.value = option.getAttribute('data-value');
-                            matched = true;
+                            matched = true; // Flag true for match
                         }
                     });
                     if (!matched) {
@@ -394,15 +409,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                     const fields = ['name', 'brand', 'description', 'color_id', 'material_id', 'price', 'discount', 'gender'];
                     const updatedData = {};
-                    let hasChanges = false;
+                    let hasChanges = false; // Flag for changes
                 
                     fields.forEach(field => {
+                        // Find related field using 'shoeId' & 'field'
                         const element = document.querySelector(`[data-id="${shoeId}"][data-field="${field}"]`);
                         if (element) {
                             let fieldValue = "";
+                            // Special handling for description (All text) 
                             if (field === 'description') {
                                 fieldValue = element.querySelector('.full-description').innerText.trim();
-                            } else if (field === 'color_id' || field === 'material_id') {
+                            }
+                            // Special handling for color & material 
+                            else if (field === 'color_id' || field === 'material_id') {
                                 fieldValue = element.value.trim();
                             } else {
                                 fieldValue = element.innerText.trim();
@@ -429,7 +448,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             formData.append(field, updatedData[field]);
                         }
                     }
-                
+
+                    // Send data to server
                     fetch(window.location.href, {
                         method: 'POST',
                         body: formData,
