@@ -12,8 +12,16 @@
 8. Te demostrohet perdorimi i GitHUB/BitBucket me GIT nga grupi qe secili ka punuar ne pjesen e tij. Perdorimi i ketyre platformave eshte obligativ. 
     8.1 Detyrat duhet te jene te ndara ne menyre te barabarte per secilin anetare. Secili nga anetare duhet te kete njohuri ne HTML, CSS, JS dhe PHP ne menyre te barabarte.
 9. Projektet te cilat nuk kane back end por vetëm HTML/CSS/Javascript, apo anasjelltas, nuk pranohen per mbrojtje.
-10. Mbrojtja do te behet ne menyre individuale. Vleresimi pozitiv nga mbrojtja behet vetem nese studenti arrin te mbroje punen e tij ne kontekstin full-stack (HTML, CSS, JS dhe PHP). 
--->
+10. Mbrojtja do te behet ne menyre individuale. Vleresimi pozitiv nga mbrojtja behet vetem nese studenti arrin te mbroje punen e tij ne kontekstin full-stack (HTML, CSS, JS dhe PHP). -->
+
+<!-- Unimplemented Features:
+1: Shoe Categorys - Storts, Boots, Sneakers etc.
+2: Shoe Rating -> Avg. Rating -> Popular Shoes.
+3: Shoe Filtering On Index and Shoe Editor.
+4: Order Button Show Shoe Overlay -> Shoe Overlay + Size Select & Functionong Stock.
+5: Shoping Cart.
+6: Admin Account Implementation.
+7: PHP Mailer -->
 
 <!DOCTYPE html>
 <html>
@@ -206,7 +214,7 @@
                     <div class="content">
                         <h3><?php echo htmlspecialchars($shoe['name']); ?></h3>
                         <p>
-                            <?php echo htmlspecialchars($shoe['description']); ?>
+                            <?php echo htmlspecialchars_decode($shoe['description']); ?>
                         </p>
                         <div class="price">
                             <?php

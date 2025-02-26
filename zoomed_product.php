@@ -1,15 +1,5 @@
 <?php
-
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "shoe-store";
-
-$conn = new mysqli($servername, $username, $password, $database);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+require "config.php";
 
 $shoe_name = $description = $origin = $shoe_price = $discounted_price = ""; // Move variable initialization here
 $sizes_options = $image_paths = [];
